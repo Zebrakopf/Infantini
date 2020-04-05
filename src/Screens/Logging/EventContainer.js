@@ -28,11 +28,13 @@ class EventContainer extends Component{
       currentHour = currentHour > 24 ? currentHour - 24 : currentHour
       endTime = endTime-addedHours*60
       if (endTime < 10){
+        console.log(startTime, " last else ",endTime)
+
         endTime = "0" + endTime
       }
       endTime = currentHour + ":" + endTime
       if (startTime < 10){
-        endTime = "0" + startTime
+        startTime = "0" + startTime
       }
     }
     else{
@@ -63,21 +65,14 @@ class EventContainer extends Component{
       showInfo:false
     })
   }
-onPressAdd = () =>{
-  this.setState({
-    showLoggingTabs:true
-  })
-}
+
   render(){
     let eventBox = null
     let showInfo = null
     let loggingTabs = null
-    let addButton = (<View style={styles.addButtonContainer}>
-                      <TouchableOpacity style={styles.addButton} onPress={this.onPressAdd}><Icon name={"md-add"} size={35} color={"white"}/></TouchableOpacity>
-                    </View>)
     if(this.props.showEvent){
       eventBox = (<PanEvent Size ={this.props.screenWidth*0.9*0.08333*(this.props.dataPickerlength/5)} tooBig={this.props.dataPickerlength < 60} infoHandler={this.showTimeHandler} infoDisapper={this.makeInfoDisappear} dropZoneValues={this.props.dropZoneValues} onVanish={this.props.onVanish} latestCategory={this.props.latestCategory}/>)
-      addButon = null
+
     }
     if(this.state.showInfo){
       showInfo = <View style={styles.infoContainer}><Text>{this.state.category} from {this.state.currentHour}:{this.state.infoTime} till {this.state.endTime}</Text></View>

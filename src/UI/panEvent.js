@@ -107,7 +107,7 @@ export class PanEvent extends Component {
   //       break
   //   }
 
-  }
+  //}
 
   isDropZone(gesture, event){
     var width = Dimensions.get("window").width

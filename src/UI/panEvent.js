@@ -88,24 +88,24 @@ export class PanEvent extends Component {
     }
 
 
-  ComponentDidUpdate(){
-    switch(this.props.latestCategory){
-      case "Cry":
-        this.setState({
-          color:"#009E95"
-        })
-        break
-      case "Food":
-        this.setState({
-          color:"#6EE8FF"
-        })
-        break
-      case "Sleep":
-        this.setState({
-          color:"#C264E8"
-        })
-        break
-    }
+  // ComponentDidUpdate(){
+  //   switch(this.props.latestCategory){
+  //     case "Cry":
+  //       this.setState({
+  //         color:"#009E95"
+  //       })
+  //       break
+  //     case "Food":
+  //       this.setState({
+  //         color:"#6EE8FF"
+  //       })
+  //       break
+  //     case "Sleep":
+  //       this.setState({
+  //         color:"#C264E8"
+  //       })
+  //       break
+  //   }
 
   }
 

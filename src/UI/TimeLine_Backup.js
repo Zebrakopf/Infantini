@@ -97,7 +97,7 @@ class TimeLine extends Component{
     }
 
     return(
-    <View onLayout={this.props.setDropValues} style={[{backgroundColor:"#eee", width:this.props.screenWidth*0.9,flexDirection:"row", borderWidth:1, borderRadius:3, borderColor:"black", elevation:2,
+    <View onLayout={this.props.setDropValues} style={[{backgroundColor:"#fff", width:this.props.screenWidth*0.9,flexDirection:"row", borderWidth:1, borderRadius:3, borderColor:"black", elevation:8,
     height:this.props.screenHeight*0.2,marginTop: this.props.screenHeight*0.05, marginLeft:this.props.screenWidth*0.05, marginRight:this.props.screenWidth*0.05 }]}>
       <View style={[, styles.dashesContainer,{borderLeftWidth:1, borderColor:"#eee"}]}>
       </View>
@@ -123,7 +123,7 @@ class TimeLine extends Component{
       </View>
       <View style={[styles.dashesContainer,{borderRightWidth:1, borderRightWidth:0,}]}>
       </View>
-      <View style={[{width:"100%", height:"80%",marginTop:this.props.screenHeight*0.2*0.1, position: "absolute", backgroundColor:"#eee"}]}>
+      <View style={[{width:"100%", height:"80%",marginTop:this.props.screenHeight*0.2*0.1, position: "absolute", backgroundColor:"#fff"}]}>
         <View style={styles.rowBoxes}>{boxesCry}{boxesSleep}</View>
         <View style={styles.rowBoxes}>{boxesSoothing}</View>
         <View style={styles.rowBoxes}>{boxesMoment}</View>

@@ -43,7 +43,6 @@ class LoggingScreen extends Component {
 
   componentDidUpdate(){
     let selectedHour = this.props.navigation.state
-    console.log("navSTate:", selectedHour)
     if(selectedHour.params){
       if(selectedHour.params.index)
       {
@@ -78,7 +77,6 @@ class LoggingScreen extends Component {
   }
   }
   componentDidMount(){
-    console.log("navigate to logging:",this.props.navigation.state.params)
     const date = moment()//.add(moment().utcOffset(),"m")
     let prevHour = date.clone()
     let nextHour = date.clone()
@@ -180,16 +178,20 @@ class LoggingScreen extends Component {
 
   AcceptModal = (duration,tags,description,intensity,fallAsleepDuration, soothingSuccess) =>{
     let qualifier = tags
-    if(intensity){
-      qualifier.push({intensity:intensity})
+    let stateInt = intensity
+    let stateAsleep = fallAsleepDuration
+    let stateSucc = soothingSuccess
+    console.log("---------------desc working?", description)
+    if(!intensity){
+        stateInt = "undefined"
     }
-    if(fallAsleepDuration){
-      qualifier.push({fallAsleepDuration:fallAsleepDuration})
+    if(!fallAsleepDuration){
+      stateAsleep = "undefined"
     }
     if(soothingSuccess){
-
-        qualifier.push({soothingSuccess:soothingSuccess})
+      stateSucc = "undefined"
     }
+
     this.setState(prevState =>{
       return{
         ...prevState,
@@ -199,7 +201,10 @@ class LoggingScreen extends Component {
           ...prevState.dataPicker,
           description: description,
           length:duration,
-          qualifier: qualifier
+          qualifier: qualifier,
+          intensity: intensity,
+          fallAsleep:fallAsleepDuration,
+          success:soothingSuccess
         }
       }
     })
@@ -242,14 +247,28 @@ class LoggingScreen extends Component {
                         currentMonth:this.state.time.currentMonth,
                         currentHour: this.state.time.currentHour,
                         startDateObj:moment({ year :this.state.time.currentYear , month :this.state.time.currentMonthN - 1, day :this.state.time.currentDay,
-                                              hour :(parseInt(this.state.time.currentHour)), minute : Math.round(startTime), second :0, millisecond :0}).add(1,'h'),
+                                              hour :(parseInt(this.state.time.currentHour)), minute : Math.round(startTime), second :0, millisecond :0}).add(moment().utcOffset(),"m"),
                         endDateObj: moment({ year :this.state.time.currentYear , month :this.state.time.currentMonthN - 1, day :this.state.time.currentDay,
-                                    hour :(parseInt(this.state.time.currentHour)), minute : Math.round(startTime), second :0, millisecond :0}).add(1,'h').add(this.state.dataPicker.length,"m")                    }
+                                    hour :(parseInt(this.state.time.currentHour)), minute : Math.round(startTime), second :0, millisecond :0}).add(moment().utcOffset(),"m").add(this.state.dataPicker.length,"m")                    }
+
+    console.log("reset event",this.state.latestCategory,
+    startTime,
+    this.state.dataPicker.length,
+    this.state.dataPicker.qualifier,
+    this.state.dataPicker.intensity,
+    this.state.dataPicker.fallAsleep,
+    this.state.dataPicker.success,
+    this.state.dataPicker.description,
+    this.state.screenWidth*0.9*0.08333*(this.state.dataPicker.length/5),
+    timeStamp)
     this.props.onAddEvent(
       this.state.latestCategory,
       startTime,
       this.state.dataPicker.length,
       this.state.dataPicker.qualifier,
+      this.state.dataPicker.intensity,
+      this.state.dataPicker.fallAsleep,
+      this.state.dataPicker.success,
       this.state.dataPicker.description,
       this.state.screenWidth*0.9*0.08333*(this.state.dataPicker.length/5),
       timeStamp)
@@ -369,7 +388,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    onAddEvent: (category, start, duration, qualifier, description, size, timeStamp) => dispatch(eventActions.addEvent(category, start, duration, qualifier, description, size, timeStamp)),
+    onAddEvent: (category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp) => dispatch(eventActions.addEvent(category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp)),
     onDeleteEvent: (id) => dispatch(eventActions.deleteEvent(id))
   };
 }

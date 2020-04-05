@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin:5,
     borderRadius: 5,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: "black",
     justifyContent:"center",
     alignItems: "center",

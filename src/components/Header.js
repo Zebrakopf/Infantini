@@ -11,14 +11,17 @@ const Header = (props) =>{
   return(
     <View style={styles.container}>
       <View style={styles.backButton}>
-        <ButtonWithBackground style={{marginLeft:10, width:"40%", height:"70%", alignItems:"flex-start", justifyContent:"center"}} title={"Cancel"} onPress={() =>{sendEmail(
-                                                                                                                                                                            'recipient',
-                                                                                                                                                                               'Infantino: My Data',
-                                                                                                                                                                            JSON.stringify(props.events.map(event =>({event})),null,'\t'),
-                                                                                                                                                                         { cc: 'harms.schroeder@gmail.com;' }
-                                                                                                                                                                        ).then(() => {
-                                                                                                                                                                            console.log('Your message was successfully sent!');
-                                                                                                                                                                        });}}><Icon name={"md-mail"} size={25} color={"white"}/></ButtonWithBackground>
+      {props.backButton ?  <ButtonWithBackground style={{marginLeft:10, width:"40%", height:"70%", alignItems:"flex-start", justifyContent:"center"}} title={"Cancel"} onPress={() =>{props.onClose("Home")}}><Icon name={"md-arrow-back"} size={25} color={"white"}/></ButtonWithBackground>
+      : <ButtonWithBackground style={{marginLeft:10, width:"40%", height:"70%", alignItems:"flex-start", justifyContent:"center"}} title={"Cancel"} onPress={() =>{sendEmail(
+                                                                                                                                                                          'recipient',
+                                                                                                                                                                             'Infantino: My Data',
+                                                                                                                                                                          JSON.stringify(props.events.map(event =>({event})),null,'\t'),
+                                                                                                                                                                       { cc: 'harms.schroeder@gmail.com;' }
+                                                                                                                                                                      ).then(() => {
+                                                                                                                                                                          console.log('Your message was successfully sent!');
+                                                                                                                                                                      });}}><Icon name={"md-mail"} size={25} color={"white"}/></ButtonWithBackground>
+      }
+
       </View>
       <View style={styles.title}>
         <Text style={styles.text}>{props.title == 'Home' ? null : props.title}</Text>

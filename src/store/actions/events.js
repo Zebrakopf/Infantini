@@ -7,24 +7,30 @@ export const deleteEvent = eventId => {
 }
 
 //qualifier could for example be inesity with crying or kind of feeding in food or ease of falling asleep
-export const addEvent = (category, start, duration, qualifier, description, size, timeStamp) =>{
+export const addEvent = (category, start, duration, qualifier,intensity, fallAsleep, success, description, size, timeStamp) =>{
   return {type: ADD_EVENT, eventData:{
     category,
     start,
     duration,
     qualifier,
+    intensity,
+    fallAsleep,
+    success,
     description,
     size,
     timeStamp
   }}
 }
 
-export const updateEvent = (id, category, start, duration, qualifier, description, size, timeStamp) =>{
+export const updateEvent = (id, category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp) =>{
   return {type: UPDATE_EVENT, eid: id, eventData:{
     category,
     start,
     duration,
     qualifier,
+    intensity,
+    fallAsleep,
+    success,
     description,
     size,
     timeStamp

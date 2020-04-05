@@ -6,7 +6,9 @@ import Colors from '../../../../constants/Colors'
 
 const SuccessSelector = (props) =>{
     const [selected,handleSelect] = useState("not selected")
-    useEffect(()=>{props.handleSuccessChange(selected)},[selected])
+    useEffect(()=>{
+      props.handleSuccessChange(selected)
+    },[selected])
 
   return(
     <View style={styles.container}>

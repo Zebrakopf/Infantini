@@ -52,6 +52,7 @@ const store = createStore(persistedReducer)
 // Middleware: Redux Persist Persister
 let persistor = persistStore(store);
 
+
 const App = () => {
   //persistor.purge()
   // console.log("cleared")

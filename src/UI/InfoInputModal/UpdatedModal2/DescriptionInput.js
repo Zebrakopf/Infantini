@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView} from 'react-native'
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -7,9 +7,12 @@ import Colors from '../../../../constants/Colors'
 
 const DurationInput = (props) =>{
   const [descriptionInput,setDescription] = useState("")
+  useEffect(()=>{
+    props.onChangeDescription(descriptionInput)
+  },[descriptionInput])
   return(
       <View style={styles.controlPanel}>
-        <TextInput style={styles.input}  value={descriptionInput} onChangeText={(text) => {setDescription(text); props.onChangeDescription(text)}} placeholder="Enter description"/>
+        <TextInput style={styles.input}  value={descriptionInput} onChangeText={(text) => setDescription(text)} placeholder="Enter description"/>
       </View>
   )
 }

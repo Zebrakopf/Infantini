@@ -37,21 +37,21 @@ const listItem = (props) => {
   const determineCircle = (category) =>{
     switch(category){
       case "Cry":
-        return (<View style={[styles.eventCircle,{backgroundColor:EventColors.cry.grumpy}]} />)
+        return (<View style={[styles.eventCircle,{backgroundColor:EventColors.cry.grumpy}]} key={Math.random()} />)
       case "Sleep":
-        return (<View style={[styles.eventCircle,{backgroundColor:EventColors.sleep}]} />)
+        return (<View style={[styles.eventCircle,{backgroundColor:EventColors.sleep}]} key={Math.random()} />)
         break;
       case "Food":
-        return (<View style={[styles.eventCircle,{backgroundColor:EventColors.food}]} />)
+        return (<View style={[styles.eventCircle,{backgroundColor:EventColors.food}]} key={Math.random()}/>)
         break;
       case "Soothing":
-        return (<View style={[styles.eventCircle,{backgroundColor:EventColors.soothing}]} />)
+        return (<View style={[styles.eventCircle,{backgroundColor:EventColors.soothing}]} key={Math.random()}/>)
         break;
       case "Diapers":
-        return (<View style={[styles.eventCircle,{backgroundColor:EventColors.diaper}]} />)
+        return (<View style={[styles.eventCircle,{backgroundColor:EventColors.diaper}]} key={Math.random()}/>)
         break;
       case "Positives":
-        return (<View style={[styles.eventCircle,{backgroundColor:EventColors.positives}]} />)
+        return (<View style={[styles.eventCircle,{backgroundColor:EventColors.positives}]}key={Math.random()} />)
         break;
     }
     return null

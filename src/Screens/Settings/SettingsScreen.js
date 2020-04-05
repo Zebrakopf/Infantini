@@ -10,7 +10,7 @@ const SettingsScreen = (props) =>{
   console.log(props.navigation.state.routeName)
   return(
     <View style={styles.container}>
-    <Header backButton={false} title={"Settings"} refresh={()=>{}} events={props.events} onOptions={() => {props.navigation.pop()}}/>
+    <Header backButton={true} title={"Settings"} refresh={()=>{}} events={props.events} onOptions={() => {props.navigation.pop()}} onClose={props.navigation.navigate}/>
       <View style={styles.contentContainer}>
         <Text>SettingsScreen</Text>
       </View>
@@ -20,7 +20,7 @@ const SettingsScreen = (props) =>{
 
 SettingsScreen.navigationOptions = navData =>{
   return{
-  tabBarVisible:false
+  tabBarVisible:false,
 }
 }
 

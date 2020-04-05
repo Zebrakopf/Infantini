@@ -11,13 +11,27 @@ const initialState = {
 export default  (state = initialState, action) => {
   switch (action.type){
     case ADD_EVENT:
-      console.log(action.eventData.qualifier)
+      console.log("reducer info",
+      action.eventData.category,
+      action.eventData.start,
+      action.eventData.duration,
+      action.eventData.qualifier,
+      action.eventData.intensity,
+      action.eventData.fallAsleep,
+      action.eventData.success,
+      action.eventData.description,
+      action.eventData.size,
+      action.eventData.timeStamp
+      )
       let allEvents = [...state.allEvents]
       const newEvent = new Event(new Date().toString(),
                                   action.eventData.category,
                                   action.eventData.start,
                                   action.eventData.duration,
                                   action.eventData.qualifier,
+                                  action.eventData.intensity,
+                                  action.eventData.fallAsleep,
+                                  action.eventData.success,
                                   action.eventData.description,
                                   action.eventData.size,
                                   action.eventData.timeStamp)
@@ -31,6 +45,9 @@ export default  (state = initialState, action) => {
                                   action.eventData.start,
                                   action.eventData.duration,
                                   action.eventData.qualifier,
+                                  action.eventData.intensity,
+                                  action.eventData.fallAsleep,
+                                  action.eventData.success,
                                   action.eventData.description,
                                   action.eventData.size,
                                   action.eventData.timeStamp)

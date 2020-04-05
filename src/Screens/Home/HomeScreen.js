@@ -56,7 +56,7 @@ class HomeScreen extends Component {
               <View style= {styles.scrollview}>
               <FlatList style={{height:"100%", width:"100%"}}
               data={times}
-              renderItem={({item, index}) => <ListItem text={item} index={index} events={this.props.events} onPress={()=>{console.log(index)
+              renderItem={({item, index}) => <ListItem text={item} key={index} index={index} events={this.props.events} onPress={()=>{console.log(index)
                                                                                                                           this.props.navigation.navigate('Logging',{index})}}/>}
               keyExtractor={(item, index) => index.toString()}
               getItemLayout={(data, index) =>( {length: 80, offset: 80 * index, index: index}) }

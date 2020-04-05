@@ -19,7 +19,7 @@ const InfoModal = (props) =>{
   const [duration,handleDurationState] = useState(0)
   const [durationAsleep, handleDurationAsleepState] = useState(null)
   const [tags,handleTagState] = useState([])
-  const [description, handleDescription] = useState("")
+  const [description,setDescription] = useState("")
   const [intensity, handleIntensityState] = useState(null)
   const [soothingSuccess, handleSoothingSuccess] = useState(null)
 
@@ -34,6 +34,11 @@ const InfoModal = (props) =>{
   const [randHelper,changeRand] = useState([Math.random()])
 
 
+  const handleDescription = (text) =>{
+    //console.log("------letters from desc",text)
+    //descirption for some reason not set at the moment
+    setDescription(text)
+  }
   const checkReadyStatus = () => {
     let readyStatus = false
     switch(props.category){
@@ -43,7 +48,7 @@ const InfoModal = (props) =>{
         }
         break;
       case "Soothing":
-        if(duration && tags){
+        if(duration && tags && (soothingSuccess == 'yes' || soothingSuccess == 'no')){
           readyStatus = true
         }
         break;
@@ -237,6 +242,8 @@ const InfoModal = (props) =>{
 
 
   const acceptModal = () =>{
+    console.log("---------------desc working in the modal?", description)
+
     props.onAccept(duration,tags, description,intensity,durationAsleep, soothingSuccess)
   }
 

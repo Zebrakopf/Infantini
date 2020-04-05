@@ -5,7 +5,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../../../constants/Colors'
 import LoggingTabs from '../../components/LoggingRing'
 import CircleMenue from '../../components/circleMenue'
+import Moment from 'moment'
+import { extendMoment } from 'moment-range';
 
+const moment = extendMoment(Moment);
 
 
 
@@ -65,13 +68,36 @@ class EventContainer extends Component{
       showInfo:false
     })
   }
-
+  checkForOverlap = (SubtractXCord, xCordTouch) =>{
+      //console.log("checking for overlap", this.props.events.filter(evt=>evt.category ==='Cry' || evt.category ==='Sleep'))
+      let currentDate = this.props.time.date.clone()
+      let startTime = Math.round(this.props.calcTime(xCordTouch - SubtractXCord))
+      let newStartDateObj = moment({ year : currentDate.get('year') , month : currentDate.get('month'), day : this.props.time.currentDay,
+                            hour :currentDate.get('hour'), minute : startTime, second :0, millisecond :0}).add(moment().utcOffset(),"m")
+      let newEndDateObj = newStartDateObj.clone().add(this.props.dataPickerlength,'m')
+      const newRange = moment.range(newStartDateObj,newEndDateObj)
+      let overlap = false
+      let events = []
+      if(this.props.latestCategory === 'Cry' || this.props.latestCategory === 'Sleep'){
+         events = this.props.events.filter(evt=>evt.category ==='Cry' || evt.category ==='Sleep')
+      }else if(this.props.latestCategory !== 'Soothing'){
+               events = this.props.events.filter(evt=>evt.category ==='Diaper' || evt.category ==='Positives' || evt.category ==='Food')
+            }else return false
+    events.forEach(evt =>{
+      if(!overlap){
+      const range = moment.range(evt.timeStamp.startDateObj,evt.timeStamp.endDateObj)
+      overlap = range.overlaps(newRange)}
+    })
+    console.log("overlap?: ", overlap)
+    return overlap
+  }
   render(){
+
     let eventBox = null
     let showInfo = null
     let loggingTabs = null
     if(this.props.showEvent){
-      eventBox = (<PanEvent Size ={this.props.screenWidth*0.9*0.08333*(this.props.dataPickerlength/5)} tooBig={this.props.dataPickerlength < 60} infoHandler={this.showTimeHandler} infoDisapper={this.makeInfoDisappear} dropZoneValues={this.props.dropZoneValues} onVanish={this.props.onVanish} latestCategory={this.props.latestCategory}/>)
+      eventBox = (<PanEvent Size ={this.props.screenWidth*0.9*0.08333*(this.props.dataPickerlength/5)} tooBig={this.props.dataPickerlength < 60} infoHandler={this.showTimeHandler} infoDisapper={this.makeInfoDisappear} dropZoneValues={this.props.dropZoneValues} onVanish={this.props.onVanish} latestCategory={this.props.latestCategory} checkForOverlap={this.checkForOverlap}/>)
 
     }
     if(this.state.showInfo){
@@ -142,5 +168,7 @@ const styles = StyleSheet.create(
     },
   }
 )
+
+
 
 export default EventContainer;

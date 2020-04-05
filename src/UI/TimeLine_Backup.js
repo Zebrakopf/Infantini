@@ -37,64 +37,106 @@ const selectBoxes = (evt, currentDateStart, currentDateEnd) =>{
 
 
 class TimeLine extends Component{
+  constructor(props){
+    super(props)
+    this.state ={
+      boxesCry:null,
+      boxesSleep:null,
+      boxesMoment:null,
+      boxesSoothing:null,
+      timeBoxes:[],
+      lastHour:null
+    }
+  }
+
+  componentDidMount(){
+    this.setState({
+      lastHour:0
+    })
+  }
+  componentDidUpdate(previousProps, previousState){
+    const  timeScale = scale.scaleTime()
+                     .domain([this.props.time.date.clone().add(moment().utcOffset(),"m").toDate(),this.props.time.date.clone().add(moment().utcOffset(),"m").add(1,'h').toDate()])
+                     .range([0,this.props.screenWidth*0.9])
+
+      let boxesCry = null
+      let boxesSleep = null
+      let boxesMoment = null
+      let boxesSoothing = null
+    let currentDate = this.props.time.date.clone()
+    const currentDateStart = moment({ year : currentDate.get('year') , month : currentDate.get('month'), day : this.props.time.currentDay,
+                          hour :currentDate.get('hour'), minute : 0, second :0, millisecond :0}).add(moment().utcOffset(),"m")
+    const currentDateEnd = currentDateStart.clone().add(1,'h')
+    const timeBoxesRaw = this.props.events.filter(evt => moment(evt.timeStamp.startDateObj).isBetween(currentDateStart, currentDateEnd) ||  moment(evt.timeStamp.endDateObj).isBetween(currentDateStart, currentDateEnd) || ( moment(evt.timeStamp.startDateObj).isBefore(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isAfter(currentDateEnd)))
 
 
+    //const timeBoxes = timeBoxesDay.map(obj =>{return(selectBoxes(obj, this.props.time.currentHour))})
+    const timeBoxes = timeBoxesRaw.map(obj =>{return(selectBoxes(obj, currentDateStart, currentDateEnd))})
+
+      console.log("timeline did uodate", currentDate.get('hour') !== previousState.lastHour,timeBoxes !== previousState.timeBoxes)
+      if (timeBoxes.length!==0){
+        boxesCry = timeBoxes.map(obj => {
+          if(obj.category === "Cry")
+          {return(
+            <CalcTimeLineBox duration={obj.duration} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.cry.grumpy} titleText={"cry"} deleteEvent={this.props.deleteEvent}/>
+          )}
+        })
+        boxesSoothing = timeBoxes.map(obj => {
+          if(obj.category === "Soothing")
+          {return(
+            <CalcTimeLineBox  duration={obj.duration} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.soothing} titleText={"Soothing"} deleteEvent={this.props.deleteEvent}/>
+          )}
+        })
+        boxesSleep = timeBoxes.map(obj => {
+          if(obj.category === "Sleep")
+          {return(
+            <CalcTimeLineBox  duration={obj.duration} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.sleep} titleText={"Sleep"} deleteEvent={this.props.deleteEvent}/>
+          )}
+        })
+        boxesMoment = timeBoxes.map(obj => {
+          if(obj.category === "Food")
+          {return(
+            <CalcTimeLineBox duration={5} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.food} titleText={""} deleteEvent={this.props.deleteEvent}/>
+          )}
+          if(obj.category === "Positives")
+          {return(
+            <CalcTimeLineBox duration={5} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.positives} titleText={""} deleteEvent={this.props.deleteEvent}/>
+          )}
+          if(obj.category === "Diapers")
+          {return(
+            <CalcTimeLineBox duration={5} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.diaper} titleText={""} deleteEvent={this.props.deleteEvent}/>
+          )}
+        })
+
+
+        if(timeBoxes.length !== previousState.timeBoxes.length){
+
+          this.setState({
+            boxesCry:boxesCry,
+            boxesSleep:boxesSleep,
+            boxesMoment:boxesMoment,
+            boxesSoothing:boxesSoothing,
+            timeBoxes:timeBoxes,
+          })
+          this.props.updateBoxes(timeBoxes)
+        }
+      }
+      if(currentDate.get('hour') !== previousState.lastHour){
+
+        this.setState({
+          boxesCry:boxesCry,
+          boxesSleep:boxesSleep,
+          boxesMoment:boxesMoment,
+          boxesSoothing:boxesSoothing,
+          timeBoxes:timeBoxes,
+          lastHour:currentDate.get('hour')
+        })
+        this.props.updateBoxes(timeBoxes)
+      }
+  }
 
 
   render(){
-
-  const  timeScale = scale.scaleTime()
-                   .domain([this.props.time.date.clone().add(moment().utcOffset(),"m").toDate(),this.props.time.date.clone().add(moment().utcOffset(),"m").add(1,'h').toDate()])
-                   .range([0,this.props.screenWidth*0.9])
-
-    let boxesCry = null
-    let boxesSleep = null
-    let boxesMoment = null
-    let boxesSoothing = null
-  let currentDate = this.props.time.date.clone()
-  const currentDateStart = moment({ year : currentDate.get('year') , month : currentDate.get('month'), day : this.props.time.currentDay,
-                        hour :currentDate.get('hour'), minute : 0, second :0, millisecond :0}).add(moment().utcOffset(),"m")
-  const currentDateEnd = currentDateStart.clone().add(1,'h')
-  const timeBoxesRaw = this.props.events.filter(evt => moment(evt.timeStamp.startDateObj).isBetween(currentDateStart, currentDateEnd) ||  moment(evt.timeStamp.endDateObj).isBetween(currentDateStart, currentDateEnd) || ( moment(evt.timeStamp.startDateObj).isBefore(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isAfter(currentDateEnd)))
-
-
-  //const timeBoxes = timeBoxesDay.map(obj =>{return(selectBoxes(obj, this.props.time.currentHour))})
-  const timeBoxes = timeBoxesRaw.map(obj =>{return(selectBoxes(obj, currentDateStart, currentDateEnd))})
-
-    if (timeBoxes.length!==0){
-      boxesCry = timeBoxes.map(obj => {
-        if(obj.category === "Cry")
-        {return(
-          <CalcTimeLineBox duration={obj.duration} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.cry.grumpy} titleText={"cry"} deleteEvent={this.props.deleteEvent}/>
-        )}
-      })
-      boxesSoothing = timeBoxes.map(obj => {
-        if(obj.category === "Soothing")
-        {return(
-          <CalcTimeLineBox  duration={obj.duration} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.soothing} titleText={"Soothing"} deleteEvent={this.props.deleteEvent}/>
-        )}
-      })
-      boxesSleep = timeBoxes.map(obj => {
-        if(obj.category === "Sleep")
-        {return(
-          <CalcTimeLineBox  duration={obj.duration} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.sleep} titleText={"Sleep"} deleteEvent={this.props.deleteEvent}/>
-        )}
-      })
-      boxesMoment = timeBoxes.map(obj => {
-        if(obj.category === "Food")
-        {return(
-          <CalcTimeLineBox duration={5} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.food} titleText={""} deleteEvent={this.props.deleteEvent}/>
-        )}
-        if(obj.category === "Positives")
-        {return(
-          <CalcTimeLineBox duration={5} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.positives} titleText={""} deleteEvent={this.props.deleteEvent}/>
-        )}
-        if(obj.category === "Diapers")
-        {return(
-          <CalcTimeLineBox duration={5} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.diaper} titleText={""} deleteEvent={this.props.deleteEvent}/>
-        )}
-      })
-    }
 
     return(
     <View onLayout={this.props.setDropValues} style={[{backgroundColor:"#fff", width:this.props.screenWidth*0.9,flexDirection:"row", borderWidth:1, borderRadius:3, borderColor:"black", elevation:8,
@@ -124,9 +166,9 @@ class TimeLine extends Component{
       <View style={[styles.dashesContainer,{borderRightWidth:1, borderRightWidth:0,}]}>
       </View>
       <View style={[{width:"100%", height:"80%",marginTop:this.props.screenHeight*0.2*0.1, position: "absolute", backgroundColor:"#fff"}]}>
-        <View style={styles.rowBoxes}>{boxesCry}{boxesSleep}</View>
-        <View style={styles.rowBoxes}>{boxesSoothing}</View>
-        <View style={styles.rowBoxes}>{boxesMoment}</View>
+        <View style={styles.rowBoxes}>{this.state.boxesCry}{this.state.boxesSleep}</View>
+        <View style={styles.rowBoxes}>{this.state.boxesSoothing}</View>
+        <View style={styles.rowBoxes}>{this.state.boxesMoment}</View>
       </View>
     </View>
   )
@@ -153,10 +195,5 @@ const styles = StyleSheet.create({
 
 })
 
-const mapStateToProps = state => {
-  return {
-    events: state.events.allEvents
-  }
-}
 
-export default connect(mapStateToProps)(TimeLine)
+export default TimeLine

@@ -19,6 +19,7 @@ import * as eventActions from '../../store/actions/events'
 
 class LoggingScreen extends Component {
     state={
+      currentHourBoxes:[],
       ready:false,
       showModal:false,
       showEvent:false,
@@ -295,13 +296,18 @@ class LoggingScreen extends Component {
     alert()
     console.log(JSON.stringify(this.props.events.map(event =>({event}))))
   }
+  updateDisplayedBoxes = (boxes) =>{
+    this.setState({
+      currentHourBoxes: boxes
+    })
+  }
 
   render(){
     let timeLine = null
     let eventModal = null
     if (this.state.ready){
       timeLine = (
-        <TimeLine screenWidth={this.state.screenWidth} screenHeight={this.state.screenHeight} setDropValues={this.setDropZoneValues} time={this.state.time} deleteEvent ={this.props.onDeleteEvent}/>
+        <TimeLine screenWidth={this.state.screenWidth} screenHeight={this.state.screenHeight} setDropValues={this.setDropZoneValues} time={this.state.time} deleteEvent ={this.props.onDeleteEvent} updateBoxes={this.updateDisplayedBoxes} events={this.props.events}/>
       )
     }
     if(this.state.showModal){
@@ -323,7 +329,7 @@ class LoggingScreen extends Component {
             pressChange={this.changeTime} colorTest={"#fff"} date={this.state.time.date}/>
           </View>
           <EventContainer dropZoneValues={this.state.dropZoneValues} onVanish={this.resetEvent} calcTime={this.calcTime} currentHour={this.state.time.currentHour}
-            latestCategory={this.state.latestCategory} screenWidth={this.state.screenWidth} dataPickerlength={this.state.dataPicker.length} showEvent={this.state.showEvent}>
+            latestCategory={this.state.latestCategory} screenWidth={this.state.screenWidth} dataPickerlength={this.state.dataPicker.length} showEvent={this.state.showEvent}  time={this.state.time} events={this.props.events}>
             <View style={styles.logContainer} onLayout={(event) => this.tellmeStuff(event)}>
               {timeLine}
               <View style={{width:'100%', height:'40%'}}/>

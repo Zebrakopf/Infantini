@@ -47,7 +47,7 @@ class HomeScreen extends Component {
   render(){
     return(
         <View style={styles.container} onLayout={()=>{this.refresh()}}>
-        <Header backButton={false} title={"Home"} refresh={this.refresh} events={this.props.events} onOptions={() => {this.props.navigation.navigate('Settings')}}/>
+        <Header backButton={false} title={"Home"} refresh={this.refresh} events={this.props.events} onNavigate={this.props.navigation.navigate}/>
         <View style = {styles.elenaContainer}>
           <Text style={styles.titleText}>{moment().format('ddd, Do MMMM')}</Text>
         </View>

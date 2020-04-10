@@ -6,20 +6,32 @@ import ButtonWithBackground from '../UI/ButtonWithBackground'
 import logo from '../Assets/logoWhite.png'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { sendEmail } from './sendEmail';
-const Header = (props) =>{
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
 
+const moment = extendMoment(Moment)
+
+
+const Header = (props) =>{
+ const handleExport = () =>{
+  props.onNavigate('DateInput',{Range:true, pushSelection:(res)=>{commitMail(res)}})
+
+ }
+ const commitMail = (dateRange) =>{
+   const { startDate } = dateRange
+   const { endDate } = dateRange
+   if(startDate && endDate){
+     let tempRange = moment.range(startDate, endDate)
+     let filteredEvents = props.events.filter((evt)=>tempRange.contains(moment(evt.timeStamp.startDateObj)))
+     sendEmail( 'recipient', 'Infantino: My Data', JSON.stringify(filteredEvents.map(event =>({event})),null,'\t'), { cc: 'harms.schroeder@gmail.com;' }
+               ).then(() => { console.log('Your message was successfully sent!'); });
+   }
+ }
   return(
     <View style={styles.container}>
       <View style={styles.backButton}>
       {props.backButton ?  <ButtonWithBackground style={{marginLeft:10, width:"40%", height:"70%", alignItems:"flex-start", justifyContent:"center"}} title={"Cancel"} onPress={() =>{props.onClose("Home")}}><Icon name={"md-arrow-back"} size={25} color={"white"}/></ButtonWithBackground>
-      : <ButtonWithBackground style={{marginLeft:10, width:"40%", height:"70%", alignItems:"flex-start", justifyContent:"center"}} title={"Cancel"} onPress={() =>{sendEmail(
-                                                                                                                                                                          'recipient',
-                                                                                                                                                                             'Infantino: My Data',
-                                                                                                                                                                          JSON.stringify(props.events.map(event =>({event})),null,'\t'),
-                                                                                                                                                                       { cc: 'harms.schroeder@gmail.com;' }
-                                                                                                                                                                      ).then(() => {
-                                                                                                                                                                          console.log('Your message was successfully sent!');
-                                                                                                                                                                      });}}><Icon name={"md-mail"} size={25} color={"white"}/></ButtonWithBackground>
+      : <ButtonWithBackground style={{marginLeft:10, width:"40%", height:"70%", alignItems:"flex-start", justifyContent:"center"}} title={"Cancel"} onPress={() =>{handleExport()}}><Icon name={"md-mail"} size={25} color={"white"}/></ButtonWithBackground>
       }
 
       </View>
@@ -27,8 +39,8 @@ const Header = (props) =>{
         <Text style={styles.text}>{props.title == 'Home' ? null : props.title}</Text>
       </View>
       <View style={styles.options}>
-        <ButtonWithBackground style={{marginRight:10, width:"40%", height:"70%", alignItems:"flex-end", justifyContent:"center"}} title={"Cancel"} onPress={()=>{if(props.onOptions){
-                                                                                                                                                            props.onOptions()
+        <ButtonWithBackground style={{marginRight:10, width:"40%", height:"70%", alignItems:"flex-end", justifyContent:"center"}} title={"Cancel"} onPress={()=>{if(props.onNavigate){
+                                                                                                                                                            props.onNavigate('Settings')
                                                                                                                                                           }}}><Icon name={"md-settings"} size={25} color={"white"}/></ButtonWithBackground>
       </View>
     </View>

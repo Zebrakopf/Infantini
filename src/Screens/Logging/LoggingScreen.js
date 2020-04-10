@@ -43,11 +43,11 @@ class LoggingScreen extends Component {
   }
 
   componentDidUpdate(){
-    let selectedHour = this.props.navigation.state
-    if(selectedHour.params){
-      if(selectedHour.params.index)
+    let index = this.props.route.params
+    if(this.props.route.params){
+      if(index)
       {
-        const date = moment().hour(selectedHour.params.index)//.add(moment().utcOffset(),"m")
+        const date = moment().hour(index)//.add(moment().utcOffset(),"m")
         let prevHour = date.clone()
         let nextHour = date.clone()
         let nextDay = date.clone()
@@ -322,7 +322,7 @@ class LoggingScreen extends Component {
     return(
       <View style={styles.container}>
         <View style={{width:"100%",height:"100%", justifyContent:"center", alignItems:"center"}}>
-          <Header backButton={false} title={"Logging"} onClose={this.props.navigation.navigate} onOptions={() => {this.props.navigation.navigate('Settings')}} events={this.props.events}/>
+          <Header backButton={false} title={"Logging"} onClose={this.props.navigation.navigate} onNavigate={this.props.navigation.navigate} events={this.props.events}/>
           <View style = {styles.dateContainer}>
             <DatePicker currentDay={this.state.time.currentDay} currentMonth={this.state.time.currentMonth} currentHour={this.state.time.currentHour}
                         nextDay={this.state.time.nextDay} prevDay={this.state.time.prevDay} nextHour={this.state.time.nextHour} prevHour={this.state.time.prevHour}

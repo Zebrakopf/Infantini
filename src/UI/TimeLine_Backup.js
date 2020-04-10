@@ -51,7 +51,8 @@ class TimeLine extends Component{
 
   componentDidMount(){
     this.setState({
-      lastHour:0
+      lastHour:0,
+      lastDay:0
     })
   }
   componentDidUpdate(previousProps, previousState){
@@ -121,7 +122,7 @@ class TimeLine extends Component{
           this.props.updateBoxes(timeBoxes)
         }
       }
-      if(currentDate.get('hour') !== previousState.lastHour){
+      if(currentDate.get('hour') !== previousState.lastHour || currentDate.get('date') !== previousState.lastDay){
 
         this.setState({
           boxesCry:boxesCry,
@@ -129,7 +130,8 @@ class TimeLine extends Component{
           boxesMoment:boxesMoment,
           boxesSoothing:boxesSoothing,
           timeBoxes:timeBoxes,
-          lastHour:currentDate.get('hour')
+          lastHour:currentDate.get('hour'),
+          lastDay:currentDate.get('date')
         })
         this.props.updateBoxes(timeBoxes)
       }

@@ -7,7 +7,6 @@ import * as eventActions from '../../store/actions/events'
 
 
 const SettingsScreen = (props) =>{
-  console.log(props.navigation.state.routeName)
   return(
     <View style={styles.container}>
     <Header backButton={true} title={"Settings"} refresh={()=>{}} events={props.events} onOptions={() => {props.navigation.pop()}} onClose={props.navigation.navigate}/>

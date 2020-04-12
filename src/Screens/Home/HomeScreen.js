@@ -57,7 +57,7 @@ class HomeScreen extends Component {
               <FlatList style={{height:"100%", width:"100%"}}
               data={times}
               renderItem={({item, index}) => <ListItem text={item} key={index} index={index} events={this.props.events} onPress={()=>{console.log(index)
-                                                                                                                          this.props.navigation.navigate('Logging',{index})}}/>}
+                                                                                                                          this.props.navigation.navigate('Logging',{index:index})}}/>}
               keyExtractor={(item, index) => index.toString()}
               getItemLayout={(data, index) =>( {length: 80, offset: 80 * index, index: index}) }
               ref={(ref) => { this.FlatList = ref; }}

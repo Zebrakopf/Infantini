@@ -33,7 +33,6 @@ const defaultNavigationOptions = ({route}) => ({
         const  routeName  = route.name;
         let IconComponent = Ionicons;
         let iconName = 'md-analytics';
-        console.log("icon code")
         if (routeName === 'Home') {
           iconName = `md-home`;
 

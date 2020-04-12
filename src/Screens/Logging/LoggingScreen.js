@@ -43,7 +43,7 @@ class LoggingScreen extends Component {
   }
 
   componentDidUpdate(){
-    let index = this.props.route.params
+    let {index} = this.props.route.params
     if(this.props.route.params){
       if(index)
       {

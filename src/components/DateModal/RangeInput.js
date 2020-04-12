@@ -23,8 +23,8 @@ const RangeInput = (props) =>{
       <View style={styles.inputContainer}>
         <View style={styles.input}>
           <Text style={styles.text}>start date:</Text>
-          <TouchableOpacity style={styles.inputBox} onPress={()=>{handlePress('startDate')}}>
-            <Text>{props.startDate ? moment(props.startDate).format('DD-MM-YYYY') : '-'}</Text>
+          <TouchableOpacity style={[styles.inputBox,]} onPress={()=>{handlePress('startDate')}}>
+            <Text style={{fontSize:10,color:props.startDate ? 'black' : '#bbb'}}>{props.startDate ? moment(props.startDate).format('DD-MM-YYYY') : 'please select'}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -32,7 +32,7 @@ const RangeInput = (props) =>{
         <View style={styles.input}>
           <Text style={styles.text}>end date:</Text>
           <TouchableOpacity style={styles.inputBox} onPress={()=>{handlePress('endDate')}}>
-          <Text>{props.endDate ? moment(props.endDate).format('DD-MM-YYYY') : "-"}</Text>
+          <Text style={{fontSize:10,color:props.endDate ? 'black' : '#bbb'}}>{props.endDate ? moment(props.endDate).format('DD-MM-YYYY') : props.startDate ? 'please select' : "-"}</Text>
           </TouchableOpacity>
         </View>
       </View>

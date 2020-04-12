@@ -43,8 +43,8 @@ class LoggingScreen extends Component {
   }
 
   componentDidUpdate(){
-    let {index} = this.props.route.params
     if(this.props.route.params){
+      let {index} = this.props.route.params
       if(index)
       {
         const date = moment().hour(index)//.add(moment().utcOffset(),"m")
@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
   logContainer:{
     width:"100%",
     //height:"64%",
-    height:"100%"
+    height:"100%",
 
   },
   // bottomBar:{

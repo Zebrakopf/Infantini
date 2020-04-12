@@ -108,10 +108,9 @@ class EventContainer extends Component{
     }
     return (
       <View style={{flex:1, height:"100%", width:"100%", backgroundColor:"#fff", justifyContent:"center", alignItems: "center"}}>
+        {showInfo}
         {this.props.children}
         {eventBox}
-        {showInfo}
-        {loggingTabs}
       </View>)
   }
 
@@ -135,8 +134,10 @@ const styles = StyleSheet.create(
       justifyContent:"center",
       alignItems: "center",
       width:"100%",
-      height:"40%",
-      position:"absolute"
+      height:"10%",
+      position:"absolute",
+      top:0,
+      elevation:5
     },
     addButton:{
       height:60,

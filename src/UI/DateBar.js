@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
     flexDirection:"row",
     justifyContent:"center",
     alignItems: "center",
+    zIndex:1
   },
   dateBarContent:{
     width:"33%",
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle:{
     width:"20%",
-    height:"50%",
+    height:"100%",
     padding: 10,
     margin:5,
     borderRadius: 5,
@@ -189,7 +190,8 @@ const styles = StyleSheet.create({
     borderColor: "black",
     justifyContent:"center",
     alignItems: "center",
-    backgroundColor:"white"
+    backgroundColor:"white",
+    zIndex:2
   }
 
 })

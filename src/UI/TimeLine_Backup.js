@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import moment from 'moment'
 
-import {View, StyleSheet} from 'react-native'
+import {View,Text, StyleSheet} from 'react-native'
 import TimeLineBox from './TimeLineBox'
 import CalcTimeLineBox from './calcTimeLineBox'
 import Colors from '../../constants/EventColors'
@@ -50,9 +50,16 @@ class TimeLine extends Component{
   }
 
   componentDidMount(){
+    let currentDate = this.props.time.date.clone()
+    const currentDateStart = moment({ year : currentDate.get('year') , month : currentDate.get('month'), day : this.props.time.currentDay,
+                          hour :currentDate.get('hour'), minute : 0, second :0, millisecond :0}).add(moment().utcOffset(),"m")
+    const currentDateEnd = currentDateStart.clone().add(1,'h')
+    console.log("timeline mount times",currentDateStart,currentDateEnd,currentDateStart.format('HH:mm'),currentDateEnd.format('HH:mm'))
     this.setState({
       lastHour:0,
-      lastDay:0
+      lastDay:0,
+      currentStart:currentDateStart,
+      currentEnd:currentDateEnd,
     })
   }
   componentDidUpdate(previousProps, previousState){
@@ -118,6 +125,8 @@ class TimeLine extends Component{
             boxesMoment:boxesMoment,
             boxesSoothing:boxesSoothing,
             timeBoxes:timeBoxes,
+            currentStart:currentDateStart,
+            currentEnd:currentDateEnd,
           })
           this.props.updateBoxes(timeBoxes)
         }
@@ -131,18 +140,21 @@ class TimeLine extends Component{
           boxesSoothing:boxesSoothing,
           timeBoxes:timeBoxes,
           lastHour:currentDate.get('hour'),
-          lastDay:currentDate.get('date')
+          lastDay:currentDate.get('date'),
+          currentStart:currentDateStart,
+          currentEnd:currentDateEnd,
         })
         this.props.updateBoxes(timeBoxes)
       }
+
   }
 
 
   render(){
 
     return(
-    <View onLayout={this.props.setDropValues} style={[{backgroundColor:"#fff", width:this.props.screenWidth*0.9,flexDirection:"row", borderWidth:1, borderRadius:3, borderColor:"black", elevation:8,
-    height:this.props.screenHeight*0.2,marginTop: this.props.screenHeight*0.05, marginLeft:this.props.screenWidth*0.05, marginRight:this.props.screenWidth*0.05 }]}>
+    <View onLayout={this.props.setDropValues} style={[{backgroundColor:"#fff", width:this.props.screenWidth*0.9,flexDirection:"row", borderWidth:1, borderRadius:3, borderColor:"black", elevation:3,
+    height:this.props.screenHeight*0.2,marginTop: this.props.screenHeight*0.10, marginLeft:this.props.screenWidth*0.05, marginRight:this.props.screenWidth*0.05 }]}>
       <View style={[, styles.dashesContainer,{borderLeftWidth:1, borderColor:"#eee"}]}>
       </View>
       <View style={styles.dashesContainer}>
@@ -171,6 +183,17 @@ class TimeLine extends Component{
         <View style={styles.rowBoxes}>{this.state.boxesCry}{this.state.boxesSleep}</View>
         <View style={styles.rowBoxes}>{this.state.boxesSoothing}</View>
         <View style={styles.rowBoxes}>{this.state.boxesMoment}</View>
+      </View>
+      <View style={{width:this.props.screenWidth*0.10,height:this.props.screenWidth*0.10,position:'absolute', top:this.props.screenHeight*0.2, right:this.props.screenWidth*0.9-(this.props.screenWidth*0.11)/2, alignItems:'center'}}>
+      <View style={{width:1, height:10, backgroundColor:'black'}}>
+      </View>
+        <Text style={{fontSize:10}}>{this.state.currentStart ? this.state.currentStart.clone().subtract(moment().utcOffset(),'m').format('HH:mm') : this.state.lastHour}</Text>
+      </View>
+
+      <View style={{width:this.props.screenWidth*0.10,height:this.props.screenWidth*0.10,position:'absolute', top:this.props.screenHeight*0.2, left:this.props.screenWidth*0.9-(this.props.screenWidth*0.11)/2, alignItems:'center'}}>
+      <View style={{width:1, height:10, backgroundColor:'black'}}>
+      </View>
+        <Text style={{fontSize:10}}>{this.state.currentEnd ? this.state.currentEnd.clone().subtract(moment().utcOffset(),'m').format('HH:mm') : this.state.lastDay}</Text>
       </View>
     </View>
   )

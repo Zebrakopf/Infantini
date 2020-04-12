@@ -13,7 +13,7 @@ const InfoPage = (props) =>{
       <View style={styles.titleLine}>
         <Text style={styles.title}>{props.title}</Text>
       </View>
-      <View style={{height:"80%", width:"90%", alignItems:"center", justifyContent:"center"}}>
+      <View style={{height:"70%", width:"90%", alignItems:"center", justifyContent:"center"}}>
         {props.children}
       </View>
       <View style={styles.buttonLine}>
@@ -27,25 +27,26 @@ const InfoPage = (props) =>{
 const styles = StyleSheet.create({
   buttonLine:{
     width:"100%",
-    height:"10%",
+    height:"20%",
     flexDirection:"row",
-    alignItems:"center",
+    alignItems:"flex-end",
     justifyContent:"space-between",
+    paddingBottom:20,
+    //backgroundColor:'red',
+    //position:'absolute'
   },
   buttonLeft:{
-    height:"100%",
-    width:"40%",
+    height:40,
+    width:110,
     backgroundColor: "green",
-    marginBottom:10,
     alignItems:"center",
     justifyContent:"center",
     borderRadius:20
   },
   buttonRight:{
-    height:"100%",
-    width:"40%",
+    height:40,
+    width:110,
     backgroundColor: Colors.primary,
-    marginBottom:10,
     alignItems:"center",
     justifyContent:"center",
     borderRadius:20

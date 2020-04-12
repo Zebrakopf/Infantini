@@ -159,6 +159,8 @@ const DateRangeInput = ({route, navigation}) =>{
       if(moment(selectedDate).isBefore(date)){
         range = moment.range(selectedDate, date)
       }else{
+        firstDate = date
+        secondDate = selectedDate
         range = moment.range(date,selectedDate)
       }
     }else{

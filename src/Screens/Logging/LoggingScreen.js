@@ -332,7 +332,7 @@ class LoggingScreen extends Component {
             latestCategory={this.state.latestCategory} screenWidth={this.state.screenWidth} dataPickerlength={this.state.dataPicker.length} showEvent={this.state.showEvent}  time={this.state.time} events={this.props.events}>
             <View style={styles.logContainer} onLayout={(event) => this.tellmeStuff(event)}>
               {timeLine}
-              <View style={{width:'100%', height:'40%'}}/>
+              <View style={{width:'100%', height:'35%'}}/>
             <CircleMenue onSelect={this.OpenModal}/>
             </View>
           </EventContainer>

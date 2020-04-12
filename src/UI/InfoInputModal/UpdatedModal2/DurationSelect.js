@@ -132,17 +132,17 @@ const styles = StyleSheet.create({
     flexDirection:"row"
   },
   selectorContainer:{
-    height:"100%",
+    height:boxHeight*0.7,
     width:"40%",
   },
   arrowContainer:{
-    height:"15%",
+    height:boxHeight*0.2,
     width:"100%",
     alignItems:"center",
     justifyContent:"center"
   },
   seperator:{
-    height:"100%",
+    height:boxHeight*0.7,
     width:"20%",
     alignItems:"center",
     justifyContent:"center"

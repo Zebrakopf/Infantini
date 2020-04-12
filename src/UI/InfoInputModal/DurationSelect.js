@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
   selectorContainer:{
     height:"100%",
     width:"40%",
+    justifyContent:'center',
   },
   arrowContainer:{
     height:"15%",

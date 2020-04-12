@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {Dimensions} from 'react-native'
 import CircleMenu from './circleMenu'
 import Colors from '../../constants/EventColors'
 
@@ -69,10 +70,15 @@ class CircleMenue extends Component {
     }
 
     render() {
+      let height = Dimensions.get('window').height
+      let width = Dimensions.get('window').width
+      console.log(height, width)
     	return <CircleMenu
             bgColor={MainColors.primary}
             items={this.items}
             onPress={(index) => {this.onPress(index)}}
+            itemSize={height < 600 ? 60 :this.props.itemSize}
+            radius={height < 600 ? 120 : this.props.radius}
         />
     }
 }

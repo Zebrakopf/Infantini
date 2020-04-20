@@ -13,6 +13,8 @@ import Header from '../../components/Header'
 import PanEvent from '../../UI/panEvent'
 import LoggingTabs from "../../components/LoggingTabs"
 import CircleMenue from '../../components/circleMenue'
+import FadeBackground from '../../UI/FadeBackground'
+
 
 import {connect } from 'react-redux';
 import * as eventActions from '../../store/actions/events'
@@ -301,13 +303,20 @@ class LoggingScreen extends Component {
       currentHourBoxes: boxes
     })
   }
+  onLongEventPress = (id) =>{
+    let tempEvent = this.props.events.filter((evt)=>evt.id === id)
+    console.log({id:moment(id),
+                event: tempEvent})
+  }
 
   render(){
     let timeLine = null
     let eventModal = null
     if (this.state.ready){
       timeLine = (
-        <TimeLine screenWidth={this.state.screenWidth} screenHeight={this.state.screenHeight} setDropValues={this.setDropZoneValues} time={this.state.time} deleteEvent ={this.props.onDeleteEvent} updateBoxes={this.updateDisplayedBoxes} events={this.props.events}/>
+        <TimeLine screenWidth={this.state.screenWidth} screenHeight={this.state.screenHeight}
+                  setDropValues={this.setDropZoneValues} time={this.state.time} deleteEvent={this.onLongEventPress}
+                  updateBoxes={this.updateDisplayedBoxes} events={this.props.events}/>
       )
     }
     if(this.state.showModal){
@@ -321,15 +330,17 @@ class LoggingScreen extends Component {
 
     return(
       <View style={styles.container}>
+        {//<FadeBackground />
+        }
         <View style={{width:"100%",height:"100%", justifyContent:"center", alignItems:"center"}}>
           <Header backButton={false} title={"Logging"} onClose={this.props.navigation.navigate} onNavigate={this.props.navigation.navigate} events={this.props.events}/>
           <View style = {styles.dateContainer}>
             <DatePicker currentDay={this.state.time.currentDay} currentMonth={this.state.time.currentMonth} currentHour={this.state.time.currentHour}
                         nextDay={this.state.time.nextDay} prevDay={this.state.time.prevDay} nextHour={this.state.time.nextHour} prevHour={this.state.time.prevHour}
-            pressChange={this.changeTime} colorTest={"#fff"} date={this.state.time.date}/>
+            pressChange={this.changeTime} colorTest={"transparent"} date={this.state.time.date}/>
           </View>
           <EventContainer dropZoneValues={this.state.dropZoneValues} onVanish={this.resetEvent} calcTime={this.calcTime} currentHour={this.state.time.currentHour}
-            latestCategory={this.state.latestCategory} screenWidth={this.state.screenWidth} dataPickerlength={this.state.dataPicker.length} showEvent={this.state.showEvent}  time={this.state.time} events={this.props.events}>
+            latestCategory={this.state.latestCategory} screenWidth={this.state.screenWidth} dataPickerlength={this.state.dataPicker.length} showEvent={this.state.showEvent}  time={this.state.time} events={this.props.events} color={'transparent'}>
             <View style={styles.logContainer} onLayout={(event) => this.tellmeStuff(event)}>
               {timeLine}
               <View style={{width:'100%', height:'35%'}}/>
@@ -359,6 +370,7 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent:"center",
     alignItems: "center",
+    backgroundColor:'#fff'
   },
   dateContainer:{
     width:"100%",
@@ -372,18 +384,6 @@ const styles = StyleSheet.create({
     height:"100%",
 
   },
-  // bottomBar:{
-  //   width:"100%",
-  //   height:"9%",
-  //   //backgroundColor:"#86cce3",
-  //   backgroundColor:Colors.primary,
-  //
-  // },
-
-
-
-
-
 
 })
 
@@ -395,7 +395,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onAddEvent: (category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp) => dispatch(eventActions.addEvent(category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp)),
-    onDeleteEvent: (id) => dispatch(eventActions.deleteEvent(id))
+    onDeleteEvent: (id) => dispatch(eventActions.deleteEvent(id)),
+    onUpdateEvent: (id, category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp) => dispatch(eventActions.updateEvent(id, category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp)),
+
   };
 }
 

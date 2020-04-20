@@ -107,7 +107,7 @@ class EventContainer extends Component{
       loggingTabs = <LoggingTabs lastEvents={this.props.events} onSelect={this.OpenModal} style={styles.bottomBar}/>
     }
     return (
-      <View style={{flex:1, height:"100%", width:"100%", backgroundColor:"#fff", justifyContent:"center", alignItems: "center"}}>
+      <View style={{flex:1, height:"100%", width:"100%", backgroundColor:this.props.color, justifyContent:"center", alignItems: "center"}}>
         {showInfo}
         {this.props.children}
         {eventBox}

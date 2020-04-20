@@ -14,14 +14,15 @@ import DefaultTagSelector from './DefaultTagSelector'
 import SuccessSelector from './SuccessSelector'
 
 
-
+let testVar = ""
 const InfoModal = (props) =>{
   const [duration,handleDurationState] = useState(0)
   const [durationAsleep, handleDurationAsleepState] = useState(null)
   const [tags,handleTagState] = useState([])
-  const [description,setDescription] = useState("")
+  // const [descriptionState,setDescriptionState] = useState("")
+  const [testState,setTest] = useState("")
   const [intensity, handleIntensityState] = useState(null)
-  const [soothingSuccess, handleSoothingSuccess] = useState(null)
+  const [soothingSuccess, handleSuccess] = useState(null)
 
   const [modalContent, setModalContent] = useState(null)
 
@@ -34,11 +35,18 @@ const InfoModal = (props) =>{
   const [randHelper,changeRand] = useState([Math.random()])
 
 
-  const handleDescription = (text) =>{
-    //console.log("------letters from desc",text)
-    //descirption for some reason not set at the moment
-    setDescription(text)
-  }
+  const [descriptionState, dispatch] = React.useReducer(
+    (prevState, action) => {
+      console.log("inside reducer:", action.description,prevState)
+      return {
+        ...prevState,
+        description:action.description
+      }
+    },
+    {
+
+    }
+  );
   const checkReadyStatus = () => {
     let readyStatus = false
     switch(props.category){
@@ -53,7 +61,6 @@ const InfoModal = (props) =>{
         }
         break;
       case "Food":
-        console.log(tags, tags.length)
         if(tags.length){
           readyStatus = true
         }
@@ -111,7 +118,15 @@ const InfoModal = (props) =>{
     scrollerRef.scrollTo({x:scroll,y:0})
 
   }
+  const handleDescription = (text) =>{
+  //console.log("------letters from Statedesc",descriptionState)
+    console.log("------letters from desc",text.nativeEvent.text)
+    //descirption for some reason not set at the moment
+    //setDescriptionState(text.nativeEvent.text)
+    dispatch({ type: 'UPDATE', description: text.nativeEvent.text  })
 
+    setContentSet(false)
+  }
   const handleDuration = (dur) => {
     if (dur === duration) return null
     handleDurationState(dur)
@@ -124,6 +139,10 @@ const InfoModal = (props) =>{
   }
   const handleIntensity = (val) => {
     handleIntensityState(val)
+    setContentSet(false)
+  }
+  const handleSoothingSuccess = (val) => {
+    handleSuccess(val)
     setContentSet(false)
   }
 
@@ -143,7 +162,7 @@ const InfoModal = (props) =>{
               <DefaultTagSelector category={props.category} setSelectedTags={handleTags} default/>
             </InfoPage>
             <InfoPage style={styles.page} title={"Description"} onAccept={acceptModal} onNext={handleNext} onClose={props.onClose} ready={readyToSubmit} screen={4} category={props.category} currentScreen={currentScreen} lastScreen>
-              <DescriptionInput onChangeDescription={handleDescription}/>
+              <DescriptionInput onChangeDescription={handleDescription} descriptionState={descriptionState}/>
             </InfoPage>
             </ScrollView>
         )
@@ -165,7 +184,7 @@ const InfoModal = (props) =>{
               <DefaultTagSelector category={props.category} setSelectedTags={handleTags} />
             </InfoPage>
             <InfoPage style={styles.page} title={"Description"} onAccept={acceptModal} onNext={handleNext} onClose={props.onClose} ready={readyToSubmit} screen={5} category={props.category} currentScreen={currentScreen} lastScreen >
-              <DescriptionInput onChangeDescription={handleDescription}/>
+              <DescriptionInput onChangeDescription={handleDescription} descriptionState={descriptionState}/>
             </InfoPage>
             </ScrollView>
         )
@@ -182,7 +201,7 @@ const InfoModal = (props) =>{
               <DefaultTagSelector category={props.category} setSelectedTags={handleTags}/>
             </InfoPage>
             <InfoPage style={styles.page} title={"Description"} onAccept={acceptModal} onNext={handleNext} onClose={props.onClose} ready={readyToSubmit} screen={3} category={props.category} currentScreen={currentScreen} lastScreen>
-              <DescriptionInput onChangeDescription={handleDescription}/>
+              <DescriptionInput onChangeDescription={handleDescription} descriptionState={descriptionState}/>
             </InfoPage>
             </ScrollView>
         )
@@ -199,7 +218,7 @@ const InfoModal = (props) =>{
               <DefaultTagSelector category={props.category} setSelectedTags={handleTags} />
             </InfoPage>
             <InfoPage style={styles.page} title={"Description"} onAccept={acceptModal} onNext={handleNext} onClose={props.onClose} ready={readyToSubmit} screen={3} category={props.category} currentScreen={currentScreen} lastScreen>
-              <DescriptionInput onChangeDescription={handleDescription}/>
+              <DescriptionInput onChangeDescription={handleDescription} descriptionState={descriptionState}/>
             </InfoPage>
             </ScrollView>
         )
@@ -213,7 +232,7 @@ const InfoModal = (props) =>{
               <DefaultTagSelector category={props.category} setSelectedTags={handleTags} default/>
             </InfoPage>
             <InfoPage style={styles.page} title={"Description"} onAccept={acceptModal} onNext={handleNext} onClose={props.onClose} ready={readyToSubmit} screen={2} category={props.category} currentScreen={currentScreen} lastScreen>
-              <DescriptionInput onChangeDescription={handleDescription}/>
+              <DescriptionInput onChangeDescription={handleDescription} descriptionState={descriptionState}/>
             </InfoPage>
             </ScrollView>
         )
@@ -232,7 +251,7 @@ const InfoModal = (props) =>{
               <DefaultTagSelector category={props.category} setSelectedTags={handleTags} default/>
             </InfoPage>
             <InfoPage style={styles.page} title={"Description"} onAccept={acceptModal} onNext={handleNext} onClose={props.onClose} ready={readyToSubmit} screen={4} category={props.category} currentScreen={currentScreen} lastScreen>
-              <DescriptionInput onChangeDescription={handleDescription}/>
+              <DescriptionInput onChangeDescription={handleDescription} descriptionState={descriptionState}/>
             </InfoPage>
             </ScrollView>
         )
@@ -242,9 +261,9 @@ const InfoModal = (props) =>{
 
 
   const acceptModal = () =>{
-    console.log("---------------desc working in the modal?", description)
+    console.log("---------------desc working in the modal?", descriptionState.description)
 
-    props.onAccept(duration,tags, description,intensity,durationAsleep, soothingSuccess)
+    props.onAccept(duration,tags, descriptionState.description,intensity,durationAsleep, soothingSuccess)
   }
 
   if (!contentSet){

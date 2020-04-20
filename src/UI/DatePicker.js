@@ -17,9 +17,9 @@ class DatePicker extends Component{
   return(
     <View style ={[styles.dateContainer,{backgroundColor:this.props.colorTest}]}>
     <DateBar colorTest={this.props.colorTest} pressChange={this.props.pressChange} title={this.props.currentMonth} content={this.props.currentDay} date={this.props.date}
-              next={this.props.nextDay} prev={this.props.prevDay}/>
+              next={this.props.nextDay} prev={this.props.prevDay} color={this.props.color}/>
     <DateBar colorTest={this.props.colorTest} pressChange={this.props.pressChange} title={"Hour"} content={this.props.currentHour} date={this.props.date}
-              next={this.props.nextHour} prev={this.props.prevHour}/>
+              next={this.props.nextHour} prev={this.props.prevHour} color={this.props.color}/>
     </View>
 )}
 }

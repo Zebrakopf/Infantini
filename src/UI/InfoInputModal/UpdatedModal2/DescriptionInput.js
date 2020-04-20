@@ -7,12 +7,16 @@ import Colors from '../../../../constants/Colors'
 
 const DurationInput = (props) =>{
   const [descriptionInput,setDescription] = useState("")
-  useEffect(()=>{
-    props.onChangeDescription(descriptionInput)
-  },[descriptionInput])
+  // useEffect(()=>{
+  //   props.onChangeDescription(descriptionInput)
+  // },[descriptionInput])
+  const setDesc = (val) =>{
+    setDescription(val)
+    props.onChangeDescription(val)
+  }
   return(
       <View style={styles.controlPanel}>
-        <TextInput style={styles.input}  value={descriptionInput} onChangeText={(text) => setDescription(text)} placeholder="Enter description"/>
+        <TextInput style={styles.input}  value={props.descriptionState.description} onChange={props.onChangeDescription} placeholder="Enter description"/>
       </View>
   )
 }

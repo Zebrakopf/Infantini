@@ -128,7 +128,7 @@ class DateBar extends Component{
         <Text>{this.props.title}</Text>
         <Text style={styles.dateText}>{this.props.content}</Text>
       </View>
-      <ButtonWithBackground title={"front"} style={styles.buttonStyle} color={Colors.compound} onPress={() => this.props.pressChange((this.props.title ==="Hour")?"h":"d","front")}><Icon name="md-arrow-round-forward" size={15} color="black" /></ButtonWithBackground>
+      <ButtonWithBackground title={"front"} style={styles.buttonStyle}  onPress={() => this.props.pressChange((this.props.title ==="Hour")?"h":"d","front")}><Icon name="md-arrow-round-forward" size={15} color="black" /></ButtonWithBackground>
       </View>
       <View style ={styles.dateBarContent}>
       <ButtonWithBackground title={"back"} style={styles.buttonStyle} onPress={() => this.props.pressChange((this.props.title ==="Hour")?"h":"d","back")}><Icon name="md-arrow-round-back" size={15} color="black" /></ButtonWithBackground>
@@ -190,7 +190,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
     justifyContent:"center",
     alignItems: "center",
-    backgroundColor:"white",
     zIndex:2
   }
 

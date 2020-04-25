@@ -37,6 +37,7 @@ const DeleteConfirmModal = (props) =>{
   useEffect(()=>{
     if(firstRender){
       handleFirstRender(false)
+      console.log('--------deletewindow renders')
       Animated.timing(animatedValue, { //animating this value from zero to one will update the subcategory container height, which interpolates this value
         toValue: 0,
         duration: 300,
@@ -44,7 +45,17 @@ const DeleteConfirmModal = (props) =>{
         useNativeDriver:true
       }).start(() => {  })
     }
-  },[])
+    if(!props.active){
+      onCancel()
+    }else{
+      Animated.timing(animatedValue, { //animating this value from zero to one will update the subcategory container height, which interpolates this value
+        toValue: 0,
+        duration: 300,
+        easing: Easing.inOut(Easing.quad),
+        useNativeDriver:true
+      }).start(() => {  })
+    }
+  },[props.active])
   return(
     <Animated.View style={[styles.container,{transform: [{
                                                         translateX: animatedValue.interpolate({
@@ -53,10 +64,16 @@ const DeleteConfirmModal = (props) =>{
                                                         })
                                                       }]}]}>
       <View style={[styles.row,{alignItems:'flex-start',paddingTop:10}]}>
-        <Text style={{color:'#fff', fontWeight:'bold', fontSize:19,}}>Delete Event Permanently?</Text>
+        <Text style={{color:'#fff', fontWeight:'bold', fontSize:19,}}>Permanently Delete Event?</Text>
       </View>
       <View style={[styles.row,{justifyContent:'space-between'}]}>
-        <Text style={{color:'#fff', fontSize:15,}}>Category: {props.info[0].category}</Text><Text style={{color:'#fff', fontSize:15,}}>start: {moment(props.info[0].timeStamp.startDateObj).subtract(moment().utcOffset(),'m').format("HH:mm")}</Text>
+      {
+        props.active ?
+        <>
+        <Text style={{color:'#fff', fontSize:15,}}>Category: {props.info[0].category}</Text>
+        <Text style={{color:'#fff', fontSize:15,}}>start: {moment(props.info[0].timeStamp.startDateObj).subtract(moment().utcOffset(),'m').format("HH:mm")}</Text>
+        </> : null
+        }
       </View>
       <View style={[styles.row,{padding:0,paddingBottom:10}]}>
       <ButtonWithBackground style={{...styles.buttonLeft,backgroundColor: Colors.compound}} title={"Cancel"} onPress={() =>{onCancel()}}><Text style={{color:'#fff', fontSize:18}}>No</Text></ButtonWithBackground>

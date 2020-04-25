@@ -27,7 +27,8 @@ class LoggingScreen extends Component {
       showModal:false,
       showDeleteModal:{
                         status:false,
-                        info: null
+                        info: null,
+                        changedSelection:0
                         },
       showEvent:false,
       time:{
@@ -49,8 +50,13 @@ class LoggingScreen extends Component {
       latestCategory:""
   }
 
-  componentDidUpdate(){
-    console.log("logging screen updated")
+  componentDidUpdate(prevProps,prevState){
+      //handle delete confirm compnonent (make it go awway when not further needed needed)
+    if(prevState.showDeleteModal.status ){
+      if(!(prevState.showDeleteModal.changedSelection < this.state.showDeleteModal.changedSelection) ){
+        this.hideDeleteModal()
+      }
+    }
     if(this.props.route.params){
       let {index} = this.props.route.params
       if(index)
@@ -310,13 +316,15 @@ class LoggingScreen extends Component {
     })
   }
   onLongEventPress = (id) =>{
+    let changedSelection = this.state.showDeleteModal.changedSelection + 1
     let tempEvent = this.props.events.filter((evt)=>evt.id === id)
     console.log({id:moment(id),
                 event: tempEvent})
     this.setState({
       showDeleteModal: {
                         status: true,
-                        info: tempEvent
+                        info: tempEvent,
+                        changedSelection: changedSelection
                         }
     })
     //this.props.onDeleteEvent(id)
@@ -325,7 +333,8 @@ class LoggingScreen extends Component {
     this.setState({
       showDeleteModal: {
                         status:false,
-                        info: null
+                        info: null,
+                        changedSelection: 0
                         }
     })
   }
@@ -347,7 +356,7 @@ class LoggingScreen extends Component {
     else{
       eventModal = null
     }
-    const deleteConfirmModal = this.state.showDeleteModal.status ? <DeleteConfirmModal onCancel={this.hideDeleteModal} info={this.state.showDeleteModal.info} onDelete={this.props.onDeleteEvent}/> : null
+    const deleteConfirmModal = <DeleteConfirmModal onCancel={this.hideDeleteModal} info={this.state.showDeleteModal.info} onDelete={this.props.onDeleteEvent} active={this.state.showDeleteModal.status}/>
     return(
       <View style={styles.container}>
         {//<FadeBackground />

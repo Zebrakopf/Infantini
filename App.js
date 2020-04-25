@@ -78,8 +78,8 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+        <StatusBar  backgroundColor="#59C2D2" barStyle="light-content" hidden={false} translucent={false}/>
         <SafeAreaView style={{flex:1}}>
-          <StatusBar  backgroundColor="#59C2D2" barStyle="dark-content" hidden={true} translucent={false}/>
           <AppNavigator/>
         </SafeAreaView>
       </PersistGate>

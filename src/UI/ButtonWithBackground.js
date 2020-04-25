@@ -17,12 +17,14 @@ const content = (    <View style={[styles.button, {backgroundColor: props.color}
     return content
   }
   if (Platform.OS ==="android") {
+    console.log('native feedback')
     return(
-      <TouchableNativeFeedback onPress={onPress} style={{...props.style}}>
+      <TouchableNativeFeedback onPress={onPress} style={{...props.style}} >
         {content}
       </TouchableNativeFeedback>
     );
   }
+    console.log('native feedback')
   return (
     <TouchableOpacity onPress={onPress} style={{...props.style}}>
       {content}

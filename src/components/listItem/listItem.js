@@ -31,6 +31,9 @@ const listItem = (props) => {
 
       handleMissed(true)
     }
+    if(!timeBoxesRaw.length){
+      handleEventsCircles([])
+    }
     handleCheck(checkedTemp)
   },[props.events])
 
@@ -66,7 +69,7 @@ const listItem = (props) => {
 
 
 //console.log('redirect to logging ' + currentDateStart.format("LLL") + ' end: '+ currentDateEnd.format("LT"), timeBoxesRaw)\
-
+  console.log('rerender listitems', timeBoxesRaw, eventCircles)
   return(
   <TouchableOpacity style={styles.container}onPress={() => {props.onPress()}}>
     <View style={styles.listItem}>

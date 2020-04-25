@@ -3,6 +3,7 @@ import{View, Text, StyleSheet, Dimensions, ScrollView} from 'react-native'
 import DataTemplate from '../../UI/DataScreens/DataTemplate'
 import Header from '../../components/Header'
 import AmountLogged from './AmountLogged'
+import Colors from '../../../constants/Colors'
 import moment from 'moment'
 import {connect} from 'react-redux';
 import CircleMenue from '../../components/circleMenue'
@@ -14,12 +15,21 @@ const width = Dimensions.get("window").width
 
 class DataScreen extends Component {
 
-  render(){return(
+  render(){
+    const filterSelector = null
+    // (
+    //   <View style={styles.filterContainer}>
+    //     <View style={styles.filter}>
+    //     </View>
+    //   </View>)
+
+    return(
     <View style={styles.container}>
       <Header backButton={false} title={"Data"}events={this.props.events} onNavigate={this.props.navigation.navigate}/>
       <View style={[styles.container,{flex:0, height: "90%", width:"100%" }]}>
         <ScrollView  horizontal disableIntervalMomentum style={styles.scroller} contentContainerStyle={{alignItems:"center", justifyContent:"center"}} snapToInterval={Dimensions.get("window").width*0.9}>
-          <View style={[styles.TemplateContainer,{justifyContent:'center'}]}>
+          <View style={[styles.TemplateContainer,{justifyContent:'center',backgroundColor:'transparent'}]}>
+            {filterSelector}
             <DataTemplate title={"See Data"} style={styles.information}>
             </DataTemplate>
           </View>
@@ -67,6 +77,19 @@ const styles = StyleSheet.create({
     paddingRight:2,
     alignItems:"center",
     justifyContent:"center"
+  },
+  filterContainer:{
+    width:'90%',
+    height:'15%',
+    backgroundColor:'blue',
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignItems:'center'
+  },
+  filter:{
+    width: '30%',
+    height:20,
+    backgroundColor: Colors.primary
   }
 })
 

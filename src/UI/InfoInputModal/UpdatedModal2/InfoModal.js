@@ -18,7 +18,7 @@ let testVar = ""
 const InfoModal = (props) =>{
   const [duration,handleDurationState] = useState(0)
   const [durationAsleep, handleDurationAsleepState] = useState(null)
-  const [tags,handleTagState] = useState([])
+  const [tags,handleTagState] = useState([[],[]])//[userTags][defualtTags]..later flattened
   // const [descriptionState,setDescriptionState] = useState("")
   const [testState,setTest] = useState("")
   const [intensity, handleIntensityState] = useState(null)
@@ -85,8 +85,17 @@ const InfoModal = (props) =>{
     readyHandler(readyStatus)
   }
 
-  const handleTags = (newTags) => {
-    handleTagState(newTags)
+  const handleTags = (newTags,isDefault) => {
+    let defaultTags = []
+    let userTags = []
+    if(isDefault){
+      defaultTags = newTags
+      userTags = tags[0]
+    }else{
+      userTags = newTags
+      defaultTags = tags[1]
+    }
+    handleTagState([userTags,defaultTags])
     setContentSet(false)
     }
 
@@ -263,7 +272,7 @@ const InfoModal = (props) =>{
   const acceptModal = () =>{
     console.log("---------------desc working in the modal?", descriptionState.description)
 
-    props.onAccept(duration,tags, descriptionState.description,intensity,durationAsleep, soothingSuccess)
+    props.onAccept(duration,tags.flat(), descriptionState.description,intensity,durationAsleep, soothingSuccess)
   }
 
   if (!contentSet){

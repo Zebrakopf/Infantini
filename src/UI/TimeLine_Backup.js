@@ -116,9 +116,7 @@ class TimeLine extends Component{
           )}
         })
 
-
-        if(timeBoxes.length !== previousState.timeBoxes.length){
-
+        if(timeBoxes.length !== previousState.timeBoxes.length ){
           this.setState({
             boxesCry:boxesCry,
             boxesSleep:boxesSleep,
@@ -131,7 +129,7 @@ class TimeLine extends Component{
           this.props.updateBoxes(timeBoxes)
         }
       }
-      if(currentDate.get('hour') !== previousState.lastHour || currentDate.get('date') !== previousState.lastDay){
+      if(currentDate.get('hour') !== previousState.lastHour || currentDate.get('date') !== previousState.lastDay || (!timeBoxes.length && previousState.timeBoxes.length === 1)){
 
         this.setState({
           boxesCry:boxesCry,

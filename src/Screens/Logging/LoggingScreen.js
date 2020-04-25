@@ -14,6 +14,7 @@ import PanEvent from '../../UI/panEvent'
 import LoggingTabs from "../../components/LoggingTabs"
 import CircleMenue from '../../components/circleMenue'
 import FadeBackground from '../../UI/FadeBackground'
+import DeleteConfirmModal from '../../UI/DeleteConfirmModal'
 
 
 import {connect } from 'react-redux';
@@ -24,6 +25,10 @@ class LoggingScreen extends Component {
       currentHourBoxes:[],
       ready:false,
       showModal:false,
+      showDeleteModal:{
+                        status:false,
+                        info: null
+                        },
       showEvent:false,
       time:{
         date:"",
@@ -45,6 +50,7 @@ class LoggingScreen extends Component {
   }
 
   componentDidUpdate(){
+    console.log("logging screen updated")
     if(this.props.route.params){
       let {index} = this.props.route.params
       if(index)
@@ -307,8 +313,22 @@ class LoggingScreen extends Component {
     let tempEvent = this.props.events.filter((evt)=>evt.id === id)
     console.log({id:moment(id),
                 event: tempEvent})
+    this.setState({
+      showDeleteModal: {
+                        status: true,
+                        info: tempEvent
+                        }
+    })
+    //this.props.onDeleteEvent(id)
   }
-
+  hideDeleteModal = () =>{
+    this.setState({
+      showDeleteModal: {
+                        status:false,
+                        info: null
+                        }
+    })
+  }
   render(){
     let timeLine = null
     let eventModal = null
@@ -316,7 +336,7 @@ class LoggingScreen extends Component {
       timeLine = (
         <TimeLine screenWidth={this.state.screenWidth} screenHeight={this.state.screenHeight}
                   setDropValues={this.setDropZoneValues} time={this.state.time} deleteEvent={this.onLongEventPress}
-                  updateBoxes={this.updateDisplayedBoxes} events={this.props.events}/>
+                  updateBoxes={this.updateDisplayedBoxes} events={this.props.events} />
       )
     }
     if(this.state.showModal){
@@ -327,7 +347,7 @@ class LoggingScreen extends Component {
     else{
       eventModal = null
     }
-
+    const deleteConfirmModal = this.state.showDeleteModal.status ? <DeleteConfirmModal onCancel={this.hideDeleteModal} info={this.state.showDeleteModal.info} onDelete={this.props.onDeleteEvent}/> : null
     return(
       <View style={styles.container}>
         {//<FadeBackground />
@@ -349,6 +369,7 @@ class LoggingScreen extends Component {
           </EventContainer>
         </View>
         {eventModal}
+        {deleteConfirmModal}
       </View>
     )
   }
@@ -370,7 +391,8 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent:"center",
     alignItems: "center",
-    backgroundColor:'#fff'
+    backgroundColor:'#fff',
+    zIndex:1
   },
   dateContainer:{
     width:"100%",

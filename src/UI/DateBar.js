@@ -21,12 +21,16 @@ class DateBar extends Component{
 
     this._panResponder = PanResponder.create({
 
-       onStartShouldSetPanResponder: (evt, gestureState) => true,
-        onMoveShouldSetPanResponder: (evt, gestureState) => true,
+       onStartShouldSetPanResponder: (evt, gestureState) => false,
+        onMoveShouldSetPanResponder: (evt, gestureState) => {
+          console.log(gestureState.dx)
+          return Math.abs(gestureState.dx) > 10 ? true : false
+        },
         onPanResponderGrant: (evt, gestureState) => {
         // The gesture has started. Show visual feedback so the user knows
         // what is happening!
         // gestureState.d{x,y} will be set to zero now
+        console.log('panresponder ')
       },
       onPanResponderMove: (evt, gestureState) => {
         Animated.event([null, { dx: this.state.translateX }])(evt, gestureState);
@@ -164,7 +168,7 @@ const styles = StyleSheet.create({
     flexDirection:"row",
     justifyContent:"center",
     alignItems: "center",
-    zIndex:1
+    zIndex:3
   },
   dateBarContent:{
     width:"33%",
@@ -190,7 +194,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     justifyContent:"center",
     alignItems: "center",
-    zIndex:2
+    zIndex:6
   }
 
 })

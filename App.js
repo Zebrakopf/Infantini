@@ -6,7 +6,7 @@
  * @flow
  */
 //https://itnext.io/react-native-why-you-should-be-using-redux-persist-8ad1d68fa48b    .....to see persist explanation
-import React, {Fragment} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -57,6 +57,24 @@ const App = () => {
   //persistor.purge()
   // console.log("cleared")
   //to clear async storage fully I have to relaod app once with this code running.. then close the app and reload it (with code running) one more time
+  // [firstRender, handleFirstRender] = useState(true)
+  // useEffect(()=>{
+  //   if(firstRender){
+  //     fetch('82.73.158.14')
+  // .then((response) => {
+  //    if (response.status === 200) {
+  //      console.log('success');
+  //    } else {
+  //      console.log('error');
+  //    }
+  //  })
+  // .catch((error) => {
+  //      console.log('network error: ' + error);
+  //  })
+  //   }
+  //   handleFirstRender(false)
+  //
+  //   },[])
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

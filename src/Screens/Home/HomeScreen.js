@@ -26,13 +26,14 @@ class HomeScreen extends Component {
   componentDidMount(){
 
   }
-  componentDidUpdate(){
+  componentDidUpdate(previousProps, previousState){
     let index = moment().get('hour') >= 3 ? moment().get('hour')-3 : 0
     setTimeout(
         () => { this.FlatList.scrollToIndex({animated: true, index: index})},
         1000
       )
-
+      if(this.props.events !== previousProps.events){
+      this.refresh()}
   }
   refresh = () =>{
     console.log("refresh", this.state.refresh)
@@ -56,12 +57,12 @@ class HomeScreen extends Component {
               <View style= {styles.scrollview}>
               <FlatList style={{height:"100%", width:"100%"}}
               data={times}
-              renderItem={({item, index}) => <ListItem text={item} key={index} index={index} events={this.props.events} onPress={()=>{console.log(index)
+              renderItem={({item, index}) => <ListItem text={item} refresh={this.state.refresh} key={index} index={index} events={this.props.events} onPress={()=>{console.log(index)
                                                                                                                           this.props.navigation.navigate('Logging',{index:index})}}/>}
               keyExtractor={(item, index) => index.toString()}
               getItemLayout={(data, index) =>( {length: 80, offset: 80 * index, index: index}) }
               ref={(ref) => { this.FlatList = ref; }}
-              extraData={this.state.refresh}/>
+              extraData={this.props}/>
               </View>
             </View>
         </View>

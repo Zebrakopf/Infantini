@@ -55,13 +55,13 @@ const DefaultTagSelector = (props) =>{
     if (selectedTags.indexOf(name) === -1 ){
       let newTags = [...selectedTags].concat([name])
       setSelectedTags(newTags)
-      props.setSelectedTags(newTags)
+      props.setSelectedTags(newTags,props.default)
     }
     else{
       let newTags = [...selectedTags]
       newTags.splice(newTags.indexOf(name),1)
       setSelectedTags(newTags)
-      props.setSelectedTags(newTags)
+      props.setSelectedTags(newTags,props.default)
     }
   }
   const deleteTags = (name) =>{

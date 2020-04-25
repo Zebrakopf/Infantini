@@ -78,15 +78,16 @@ const BarAmounts = (props) => {
   const xValues = data.map(obj => obj.category)
   const yValues = data.map(obj => obj.amount)
   const xRange = amountOfXValues(xValues)
+  const maxY = Math.max(...yValues) > 10 ? Math.max(...yValues) : 10
   const x = scale.scaleLinear()
               .domain([0,Math.max(...xRange)+1])
               .range([props.graphMargin , props.graphWidth ])
   const y = scale.scaleLinear()
-              .domain([Math.max(...yValues),0])
+              .domain([maxY,0])
               .range([props.graphHeight - props.graphMargin*4, props.graphMargin ]) //where the 4 sits I can shrink the graph. 2 would be default...
   const yAxis = scale.scaleLinear()
-              .domain([Math.max(...yValues),0])
-              .range([props.graphMargin*3,props.graphHeight - props.graphMargin*2])//where the 3 sits I can shrink the axis. 2 would be default...
+              .domain([maxY,0])
+              .range([props.graphMargin*3,props.graphHeight - props.graphMargin])//where the 3 sits I can shrink the axis. 2 would be default...
 
   //const ticksY = getTickPoints(1, Math.max(...props.yValues), 0, 4)
   //ticksY.push(Math.max(...props.yValues))

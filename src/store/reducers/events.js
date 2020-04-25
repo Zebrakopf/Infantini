@@ -61,8 +61,9 @@ export default  (state = initialState, action) => {
       }
     case DELETE_EVENT:
       console.log("attempts delete", action.eid)
+      let tempArray = state.allEvents.filter(evt => evt.id !== action.eid)
     return{
-      allEvents: state.allEvents.filter(evt => evt.id !== action.eid)
+      allEvents: [...tempArray]
 
     }
   }

@@ -4,7 +4,9 @@ import {
   View,
   Text,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  Animated,
+  Easing
 } from 'react-native';
 import * as scale from 'd3-scale'
 
@@ -17,7 +19,31 @@ export class CalcTimeLineBox extends Component {
 
     this.state = {
       showDraggable : true,
+      wiggleStatus:false
     };
+}
+onLongPress = () =>{
+  this.props.deleteEvent(this.props.id)
+  this.handleWiggleAnimation()
+}
+
+animatedWiggleValue = new Animated.Value(0)
+handleWiggleAnimation = () => {
+// A loop is needed for continuous animation
+console.log("startWiggle")
+
+   Animated.sequence([
+    // start rotation in one direction (only half the time is needed)
+    Animated.timing(this.animatedWiggleValue, {toValue: 1.0, duration: 200, easing: Easing.linear, useNativeDriver: true}),
+    // rotate in other direction, to minimum value (= twice the duration of above)
+    Animated.timing(this.animatedWiggleValue, {toValue: 0.0, duration: 400, easing: Easing.linear, useNativeDriver: true}),
+    // return to begin position
+  ]).start(()=>{
+                //this.handleWiggleAnimation()
+                this.setState({
+                              wiggleStatus: false
+                            })
+        })
 }
 
 
@@ -35,7 +61,7 @@ export class CalcTimeLineBox extends Component {
       console.log("duration:", this.props.duration - asleepDuration)
       return(
         <TouchableOpacity  style = {[ styles.boxContainer, {width: timeScale(this.props.duration), height: this.props.dropZoneHeight/4, marginLeft:timeScale(this.props.Position)}]}
-                            onLongPress={()=>{this.props.deleteEvent(this.props.id)}}>
+                            onLongPress={this.onLongPress}>
             <View style={{width: timeScale(asleepDuration), height: this.props.dropZoneHeight/4, borderLeftWidth:1, borderColor:"black",justifyContent:'center'}}>
               <View style={{width: timeScale(asleepDuration), height: 2, backgroundColor:this.props.boxColor}}/>
             </View>
@@ -46,10 +72,16 @@ export class CalcTimeLineBox extends Component {
       )
     }
     return (
-            <TouchableOpacity  style = {[ styles.box, {width: timeScale(this.props.duration), height: this.props.dropZoneHeight/4, marginLeft:timeScale(this.props.Position), backgroundColor:this.props.boxColor}]}
-                                onLongPress={()=>{this.props.deleteEvent(this.props.id)}}>
+          <TouchableOpacity  style={[ styles.box, {width: timeScale(this.props.duration), height: this.props.dropZoneHeight/4, marginLeft:timeScale(this.props.Position)}]} onLongPress={this.onLongPress}>
+            <Animated.View style={[ styles.box, {width: '100%', height: '100%', backgroundColor:this.props.boxColor,transform: [{
+                  scale: this.animatedWiggleValue.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 1.1]
+                  })
+                }]}]}>
                 <Text style={[styles.text,{fontSize:this.props.duration < 10 ? 5 : 12}]}>{text}</Text>
-        </TouchableOpacity>
+            </Animated.View>
+          </TouchableOpacity>
       );
 
 };

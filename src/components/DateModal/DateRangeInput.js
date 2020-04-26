@@ -157,19 +157,19 @@ const DateRangeInput = ({route, navigation}) =>{
     }else if(!selectedDate2 && showRangeStatus){
       secondDate = date
       if(moment(selectedDate).isBefore(date)){
-        range = moment.range(selectedDate, date)
+        range = moment.range(moment(selectedDate).minute(0).hour(0), moment(date).minute(0).hour(23))
       }else{
         firstDate = date
         secondDate = selectedDate
-        range = moment.range(date,selectedDate)
+        range = moment.range(moment(date).minute(0).hour(0),moment(selectedDate).minute(0).hour(23))
       }
     }else{
       firstDate= date
       secondDate = null
       range = null
     }
-    changeSelectedDate(moment(firstDate))//.add(moment(firstDate).utcOffset(),'m'))
-    changeSelectedDate2(secondDate)
+    changeSelectedDate(moment(firstDate).minute(0).hour(0))//.add(moment(firstDate).utcOffset(),'m'))
+    changeSelectedDate2(secondDate ? moment(secondDate).minute(0).hour(23) : null)
     changeSelectedRange(range)
     console.log('error cause?: ',firstDate, secondDate)
   }

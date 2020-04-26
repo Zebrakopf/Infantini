@@ -196,7 +196,6 @@ class LoggingScreen extends Component {
     let stateInt = intensity
     let stateAsleep = fallAsleepDuration
     let stateSucc = soothingSuccess
-    console.log("---------------desc working?", description)
     if(!intensity){
         stateInt = "undefined"
     }
@@ -318,8 +317,7 @@ class LoggingScreen extends Component {
   onLongEventPress = (id) =>{
     let changedSelection = this.state.showDeleteModal.changedSelection + 1
     let tempEvent = this.props.events.filter((evt)=>evt.id === id)
-    console.log({id:moment(id),
-                event: tempEvent})
+
     this.setState({
       showDeleteModal: {
                         status: true,

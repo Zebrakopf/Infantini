@@ -14,7 +14,7 @@ import * as scale from 'd3-scale'
 
 const selectBoxes = (evt, currentDateStart, currentDateEnd) =>{
   let duration = evt.duration
-  if ( moment(evt.timeStamp.startDateObj).isBetween(currentDateStart, currentDateEnd) &&  moment(evt.timeStamp.endDateObj).isBetween(currentDateStart, currentDateEnd)){
+  if ( moment(evt.timeStamp.startDateObj).isBetween(currentDateStart, currentDateEnd) &&  moment(evt.timeStamp.endDateObj).isBetween(currentDateStart, currentDateEnd) || ( moment(evt.timeStamp.startDateObj).isSame(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isSame(currentDateEnd))){
       //event starts and ends within this hour
       return ({duration: duration, id: evt.id, startTime: evt.startTime, category: evt.category, qualifier: evt.qualifier})
   }
@@ -78,7 +78,7 @@ class TimeLine extends Component{
     const currentDateStart = moment({ year : currentDate.get('year') , month : currentDate.get('month'), day : this.props.time.currentDay,
                           hour :currentDate.get('hour'), minute : 0, second :0, millisecond :0}).add(moment().utcOffset(),"m")
     const currentDateEnd = currentDateStart.clone().add(1,'h')
-    const timeBoxesRaw = this.props.events.filter(evt => moment(evt.timeStamp.startDateObj).isBetween(currentDateStart, currentDateEnd) ||  moment(evt.timeStamp.endDateObj).isBetween(currentDateStart, currentDateEnd) || ( moment(evt.timeStamp.startDateObj).isBefore(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isAfter(currentDateEnd)))
+    const timeBoxesRaw = this.props.events.filter(evt => moment(evt.timeStamp.startDateObj).isBetween(currentDateStart, currentDateEnd) ||  moment(evt.timeStamp.endDateObj).isBetween(currentDateStart, currentDateEnd) || ( moment(evt.timeStamp.startDateObj).isBefore(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isAfter(currentDateEnd)) || ( moment(evt.timeStamp.startDateObj).isSame(currentDateStart) ||  moment(evt.timeStamp.endDateObj).isSame(currentDateEnd)))
 
 
     //const timeBoxes = timeBoxesDay.map(obj =>{return(selectBoxes(obj, this.props.time.currentHour))})

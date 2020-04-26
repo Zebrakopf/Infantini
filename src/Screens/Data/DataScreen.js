@@ -26,7 +26,7 @@ class DataScreen extends Component {
     return(
     <View style={styles.container}>
       <Header backButton={false} title={"Data"}events={this.props.events} onNavigate={this.props.navigation.navigate}/>
-      <View style={[styles.container,{flex:0, height: "90%", width:"100%" }]}>
+      <View style={[styles.container,{flex:0, height: "92%", width:"100%" }]}>
         <ScrollView  horizontal disableIntervalMomentum style={styles.scroller} contentContainerStyle={{alignItems:"center", justifyContent:"center"}} snapToInterval={Dimensions.get("window").width*0.9}>
           <View style={[styles.TemplateContainer,{justifyContent:'center',backgroundColor:'transparent'}]}>
             {filterSelector}

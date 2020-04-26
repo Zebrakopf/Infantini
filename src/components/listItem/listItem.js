@@ -13,7 +13,7 @@ const listItem = (props) => {
   const currentDateStart = moment({ year : currentDate.get('year') , month : currentDate.get('month'), day : currentDate.get('date'),
                         hour :props.index, minute : 0, second :0, millisecond :0}).add(moment().utcOffset(),"m")
   const currentDateEnd = currentDateStart.clone().add(1,'h')
-  const timeBoxesRaw = props.events.filter(evt => moment(evt.timeStamp.startDateObj).isBetween(currentDateStart, currentDateEnd) ||  moment(evt.timeStamp.endDateObj).isBetween(currentDateStart, currentDateEnd) || ( moment(evt.timeStamp.startDateObj).isBefore(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isAfter(currentDateEnd)))
+  const timeBoxesRaw = props.events.filter(evt => moment(evt.timeStamp.startDateObj).isBetween(currentDateStart, currentDateEnd) ||  moment(evt.timeStamp.endDateObj).isBetween(currentDateStart, currentDateEnd) || ( moment(evt.timeStamp.startDateObj).isBefore(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isAfter(currentDateEnd)) || ( moment(evt.timeStamp.startDateObj).isSame(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isSame(currentDateEnd)))
 
   const [checked, handleCheck] = useState(false)
   const [missed, handleMissed] = useState(false)

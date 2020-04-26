@@ -23,8 +23,7 @@ const DeleteConfirmModal = (props) =>{
                     })
   }
   let onDelete = () => {
-
-    props.onDelete(props.info[0].id)
+    let deletedItemId = props.info[0].id
     Animated.timing(animatedValue, { //animating this value from zero to one will update the subcategory container height, which interpolates this value
       toValue: 1,
       duration: 300,
@@ -32,6 +31,7 @@ const DeleteConfirmModal = (props) =>{
       useNativeDriver:true
     }).start(() => {
                     props.onCancel()
+                    props.onDelete(deletedItemId)
                     })
   }
   useEffect(()=>{

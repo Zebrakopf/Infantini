@@ -19,7 +19,8 @@ export class CalcTimeLineBox extends Component {
 
     this.state = {
       showDraggable : true,
-      wiggleStatus:false
+      wiggleStatus:false,
+      unmount:false
     };
 }
 onLongPress = () =>{
@@ -28,6 +29,11 @@ onLongPress = () =>{
 }
 
 animatedWiggleValue = new Animated.Value(0)
+onWiggleCompletion = () =>{
+  if(this.props.selected === this.props.id && !this.state.unmount){
+    this.handleWiggleAnimation()
+  }
+}
 handleWiggleAnimation = () => {
 // A loop is needed for continuous animation
 console.log("startWiggle")
@@ -39,14 +45,15 @@ console.log("startWiggle")
     Animated.timing(this.animatedWiggleValue, {toValue: 0.0, duration: 400, easing: Easing.linear, useNativeDriver: true}),
     // return to begin position
   ]).start(()=>{
-                if(this.props.selected === this.props.id){
-                  this.handleWiggleAnimation()
-                }
-                // console.log("---------------eventbox selected?", this.props.selected === this.props.id)
+                this.onWiggleCompletion()
         })
 }
 
-
+componentWillUnmount(){
+  this.setState({
+    unmount:true
+  })
+}
   render(){
 
     const timeScale = scale.scaleLinear()

@@ -54,7 +54,6 @@ class TimeLine extends Component{
     const currentDateStart = moment({ year : currentDate.get('year') , month : currentDate.get('month'), day : this.props.time.currentDay,
                           hour :currentDate.get('hour'), minute : 0, second :0, millisecond :0}).add(moment().utcOffset(),"m")
     const currentDateEnd = currentDateStart.clone().add(1,'h')
-    console.log("timeline mount times",currentDateStart,currentDateEnd,currentDateStart.format('HH:mm'),currentDateEnd.format('HH:mm'))
     this.setState({
       lastHour:0,
       lastDay:0,
@@ -63,6 +62,10 @@ class TimeLine extends Component{
     })
   }
   componentDidUpdate(previousProps, previousState){
+    let selectedBox = 0
+    if(this.props.selectedEvent.info){
+      selectedBox = this.props.selectedEvent.info[0].id
+    }
     const  timeScale = scale.scaleTime()
                      .domain([this.props.time.date.clone().add(moment().utcOffset(),"m").toDate(),this.props.time.date.clone().add(moment().utcOffset(),"m").add(1,'h').toDate()])
                      .range([0,this.props.screenWidth*0.9])
@@ -81,43 +84,43 @@ class TimeLine extends Component{
     //const timeBoxes = timeBoxesDay.map(obj =>{return(selectBoxes(obj, this.props.time.currentHour))})
     const timeBoxes = timeBoxesRaw.map(obj =>{return(selectBoxes(obj, currentDateStart, currentDateEnd))})
 
-      console.log("timeline did uodate", currentDate.get('hour') !== previousState.lastHour,timeBoxes !== previousState.timeBoxes)
       if (timeBoxes.length!==0){
         boxesCry = timeBoxes.map(obj => {
           if(obj.category === "Cry")
           {return(
-            <CalcTimeLineBox duration={obj.duration} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.cry.grumpy} titleText={"cry"} deleteEvent={this.props.deleteEvent}/>
+            <CalcTimeLineBox duration={obj.duration} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.cry.grumpy} titleText={"cry"} deleteEvent={this.props.deleteEvent} selected={selectedBox}/>
           )}
         })
         boxesSoothing = timeBoxes.map(obj => {
           if(obj.category === "Soothing")
           {return(
-            <CalcTimeLineBox  duration={obj.duration} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.soothing} titleText={"Soothing"} deleteEvent={this.props.deleteEvent}/>
+            <CalcTimeLineBox  duration={obj.duration} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.soothing} titleText={"Soothing"} deleteEvent={this.props.deleteEvent} selected={selectedBox}/>
           )}
         })
         boxesSleep = timeBoxes.map(obj => {
           if(obj.category === "Sleep")
           {return(
-            <CalcTimeLineBox  duration={obj.duration} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.sleep} titleText={"Sleep"} deleteEvent={this.props.deleteEvent}/>
+            <CalcTimeLineBox  duration={obj.duration} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.sleep} titleText={"Sleep"} deleteEvent={this.props.deleteEvent} selected={selectedBox}/>
           )}
         })
         boxesMoment = timeBoxes.map(obj => {
           if(obj.category === "Food")
           {return(
-            <CalcTimeLineBox duration={5} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.food} titleText={""} deleteEvent={this.props.deleteEvent}/>
+            <CalcTimeLineBox duration={5} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.food} titleText={""} deleteEvent={this.props.deleteEvent} selected={selectedBox}/>
           )}
           if(obj.category === "Positives")
           {return(
-            <CalcTimeLineBox duration={5} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.positives} titleText={""} deleteEvent={this.props.deleteEvent}/>
+            <CalcTimeLineBox duration={5} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.positives} titleText={""} deleteEvent={this.props.deleteEvent} selected={selectedBox}/>
           )}
           if(obj.category === "Diapers")
           {return(
-            <CalcTimeLineBox duration={5} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.diaper} titleText={""} deleteEvent={this.props.deleteEvent}/>
+            <CalcTimeLineBox duration={5} key={obj.id} id ={obj.id} Position={obj.startTime} dropZoneWidth={this.props.screenWidth*0.9} dropZoneHeight={this.props.screenHeight*0.2} boxColor={Colors.diaper} titleText={""} deleteEvent={this.props.deleteEvent} selected={selectedBox}/>
           )}
         })
 
-        if(timeBoxes.length !== previousState.timeBoxes.length ){
+        if(timeBoxes.length !== previousState.timeBoxes.length || (previousState.selectedBox !== selectedBox)){
           this.setState({
+            selectedBox:selectedBox,
             boxesCry:boxesCry,
             boxesSleep:boxesSleep,
             boxesMoment:boxesMoment,
@@ -126,12 +129,12 @@ class TimeLine extends Component{
             currentStart:currentDateStart,
             currentEnd:currentDateEnd,
           })
-          this.props.updateBoxes(timeBoxes)
         }
       }
       if(currentDate.get('hour') !== previousState.lastHour || currentDate.get('date') !== previousState.lastDay || (!timeBoxes.length && previousState.timeBoxes.length === 1)){
 
         this.setState({
+          selectedBox:selectedBox,
           boxesCry:boxesCry,
           boxesSleep:boxesSleep,
           boxesMoment:boxesMoment,

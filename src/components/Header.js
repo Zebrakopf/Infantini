@@ -54,7 +54,7 @@ const Header = (props) =>{
 const styles = StyleSheet.create({
   container:{
     width:"100%",
-    height:"10%",
+    height:"8%",
     backgroundColor: Colors.primary,
     flexDirection:"row"
   },

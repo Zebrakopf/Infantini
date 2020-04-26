@@ -345,7 +345,7 @@ class LoggingScreen extends Component {
       timeLine = (
         <TimeLine screenWidth={this.state.screenWidth} screenHeight={this.state.screenHeight}
                   setDropValues={this.setDropZoneValues} time={this.state.time} deleteEvent={this.onLongEventPress}
-                  updateBoxes={this.updateDisplayedBoxes} events={this.props.events} />
+                  updateBoxes={this.updateDisplayedBoxes} events={this.props.events} selectedEvent={this.state.showDeleteModal} />
       )
     }
     if(this.state.showModal){

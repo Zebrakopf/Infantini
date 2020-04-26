@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     height:'22%',
     width:'22%',
     position:'absolute',
-    top:Dimensions.get("window").height*-0.02
+    top:Dimensions.get("window").height*-0.035
   },
   infoScroller:{
     width:"95%",

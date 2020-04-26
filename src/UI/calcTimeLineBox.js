@@ -39,15 +39,16 @@ console.log("startWiggle")
     Animated.timing(this.animatedWiggleValue, {toValue: 0.0, duration: 400, easing: Easing.linear, useNativeDriver: true}),
     // return to begin position
   ]).start(()=>{
-                //this.handleWiggleAnimation()
-                this.setState({
-                              wiggleStatus: false
-                            })
+                if(this.props.selected === this.props.id){
+                  this.handleWiggleAnimation()
+                }
+                // console.log("---------------eventbox selected?", this.props.selected === this.props.id)
         })
 }
 
 
   render(){
+
     const timeScale = scale.scaleLinear()
                 .domain([0,60])
                 .range([0, this.props.dropZoneWidth])
@@ -65,7 +66,7 @@ console.log("startWiggle")
             <View style={{width: timeScale(asleepDuration), height: this.props.dropZoneHeight/4, borderLeftWidth:1, borderColor:"black",justifyContent:'center'}}>
               <View style={{width: timeScale(asleepDuration), height: 2, backgroundColor:this.props.boxColor}}/>
             </View>
-            <View style={[ styles.box, {width: timeScale(this.props.duration-asleepDuration), height: this.props.dropZoneHeight/4, backgroundColor:this.props.boxColor}]}>
+            <View style={[ styles.box, {width: timeScale(this.props.duration-asleepDuration), height: this.props.dropZoneHeight/4, backgroundColor:this.props.boxColor, opacity:0.1}]}>
               <Text style={styles.text}>{text}</Text>
             </View>
         </TouchableOpacity>

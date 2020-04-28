@@ -10,31 +10,29 @@ const DefaultTagSelector = (props) =>{
 
 
   const tagSelector = (category) =>{
-    let tempTags
+    console.log('---------------------tags',props.tags)
+    let tempTags = props.default ? props.tags.defaultTags : props.tags.extraTags
     switch(category){
       case "Cry":
-        tempTags = props.tags.cry;
+        tempTags = tempTags.cry
         break;
       case "Sleep":
-        tempTags = props.tags.sleep;
+        tempTags = tempTags.sleep
         break;
       case "Food":
-        tempTags = props.tags.food;
+        tempTags = tempTags.food
         break;
       case "Soothing":
-        tempTags = props.tags.soothing;
+        tempTags = tempTags.soothing
         break;
       case "Diapers":
-        tempTags = props.tags.diapers;
+        tempTags = tempTags.diapers
         break;
       case "Positives":
-        tempTags = props.tags.positives;
+        tempTags = tempTags.positives
         break;
     }
-    if (props.default){
-      return tempTags.filter((name)=> name.charAt(0) == name.charAt(0).toUpperCase())
-    }
-    return tempTags.filter((name)=> name.charAt(0) == name.charAt(0).toLowerCase())
+    return tempTags
   }
 
   const [selectedTags,setSelectedTags] = useState([])
@@ -47,7 +45,14 @@ const DefaultTagSelector = (props) =>{
     if (props.default){
       tagInputTemp  = tagInput.charAt(0).toUpperCase() +  tagInput.slice(1);
     }
-    props.onAddTag(tagInputTemp, props.category)
+    if(tagInputTemp.length){
+      if(tagInputTemp.length >=1){
+
+        props.onAddTag(tagInputTemp, props.category, props.default)
+      }else{
+        alert("Please type at least one character")
+      }
+    }
     setTagInput("")
   }
 
@@ -65,7 +70,7 @@ const DefaultTagSelector = (props) =>{
     }
   }
   const deleteTags = (name) =>{
-    props.onDeleteTag(name, props.category)
+    props.onDeleteTag(name, props.category, props.default)
     changeRand(Math.random())
   }
   return(
@@ -140,8 +145,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    onAddTag: (name, category) => dispatch(tagActions.addTag(name, category)),
-    onDeleteTag: (name, category) => dispatch(tagActions.deleteTag(name, category))
+    onAddTag: (name, category, defaultInfo) => dispatch(tagActions.addTag(name, category,defaultInfo)),
+    onDeleteTag: (name, category, defaultInfo) => dispatch(tagActions.deleteTag(name, category, defaultInfo))
   };
 }
 

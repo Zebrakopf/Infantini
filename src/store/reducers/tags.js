@@ -1,71 +1,109 @@
-import {DELETE_TAG, ADD_TAG} from '../actions/tags'
+import {DELETE_TAG, ADD_TAG, REVERT_TAGS} from '../actions/tags'
 
 
 const initialState = {
   allTags: {
-    cry: ["grumpy", "crying","outside"],
-    sleep: ["loud noises","coffee"],
-    soothing: ["Swaddle","Holding","Music","Walking",],
-    diapers: ["Poop", "Pee"],
-    food: ["Solid","Blended"],
-    positives: []
+    defaultTags:{
+      cry: [],
+      sleep: [],
+      soothing: ["Swaddle","Holding","Music","Walking",],
+      diapers: ["Poop", "Pee"],
+      food: ["Solid","Blended"],
+      positives: []
+    },
+    extraTags:{
+      cry: ["grumpy", "crying","outside"],
+      sleep: ["loud noises","coffee"],
+      soothing: [],
+      diapers: [],
+      food: [],
+      positives: []
+    }
+
   }
 }
 
 
 export default  (state = initialState, action) => {
-  let tempState = state.allTags
+  let tempState = null
   switch (action.type){
     case ADD_TAG:
+      console.log(action, state)
+      if(action.tagData.tagGroup){
+        tempState = state.allTags.defaultTags
+        console.log("the tempstate",tempState,state.allTags.defaultTags)
+      }else{
+        tempState = state.allTags.extraTags
+        console.log("the tempstate",tempState)
+      }
       switch (action.tagData.category){
         case "Cry":
-        tempState.cry =  state.allTags.cry.concat(action.tagData.name)
+        tempState.cry =  tempState.cry.concat(action.tagData.name)
           break;
         case "Sleep":
-        tempState.sleep = state.allTags.sleep.concat(action.tagData.name)
+        tempState.sleep = tempState.sleep.concat(action.tagData.name)
           break;
         case "Soothing":
-        tempState.soothing = state.allTags.soothing.concat(action.tagData.name)
+        tempState.soothing = tempState.soothing.concat(action.tagData.name)
           break;
         case "Diapers":
-        tempState.diapers = state.allTags.diapers.concat(action.tagData.name)
+        tempState.diapers = tempState.diapers.concat(action.tagData.name)
           break;
         case "Food":
-        tempState.food = state.allTags.food.concat(action.tagData.name)
+        tempState.food = tempState.food.concat(action.tagData.name)
           break;
         case "Positives":
-        tempState.positives = state.allTags.positives.concat(action.tagData.name)
+        tempState.positives = tempState.positives.concat(action.tagData.name)
           break;
       }
       return{
         ...state,
-        allTags: state.allTags
+        allTags: {
+          defaultTags: action.tagData.tagGroup ? tempState : state.allTags.defaultTags,
+          extraTags: !action.tagData.tagGroup ? tempState : state.allTags.extraTags
+        }
       }
     case DELETE_TAG:
-    let newState = {...state}
-    switch (action.tagData.category){
-      case "Cry":
-        newState.allTags.cry =  state.allTags.cry.filter(evt => evt !== action.tagData.name)
-        break;
-      case "Sleep":
-        newState.allTags.sleep = state.allTags.sleep.filter(evt => evt !== action.tagData.name)
-        break;
-      case "Soothing":
-        newState.allTags.soothing = state.allTags.soothing.filter(evt => evt !== action.tagData.name)
-        break;
-      case "Diapers":
-        newState.allTags.diapers = state.allTags.diapers.filter(evt => evt !== action.tagData.name)
-        break;
-      case "Food":
-        newState.allTags.food = state.allTags.food.filter(evt => evt !== action.tagData.name)
-        break;
-      case "Positives":
-        newState.allTags.positives = state.allTags.positives.filter(evt => evt !== action.tagData.name)
-        break;
-    }
-      return{
-        ...newState
+      let newState = {...state}
+        console.log(action, state)
+        if(action.tagData.tagGroup){
+          tempState = state.allTags.defaultTags
+        }else{
+          tempState = state.allTags.extraTags
+        }
+      switch (action.tagData.category){
+        case "Cry":
+          tempState.cry =  tempState.cry.filter(evt => evt !== action.tagData.name)
+          break;
+        case "Sleep":
+          tempState.sleep = tempState.sleep.filter(evt => evt !== action.tagData.name)
+          break;
+        case "Soothing":
+          tempState.soothing = tempState.soothing.filter(evt => evt !== action.tagData.name)
+          break;
+        case "Diapers":
+          tempState.diapers = tempState.diapers.filter(evt => evt !== action.tagData.name)
+          break;
+        case "Food":
+          tempState.food = tempState.food.filter(evt => evt !== action.tagData.name)
+          break;
+        case "Positives":
+          tempState.positives = tempState.positives.filter(evt => evt !== action.tagData.name)
+          break;
       }
+        if(action.tagData.tagGroup){
+          newState.allTags.defaultTags = tempState
+        }else{
+          newState.allTags.extraTags = tempState
+        }
+        return{
+          ...newState
+        }
+      case REVERT_TAGS:
+        return{
+          ...initialState
+        }
   }
+
   return state;
 }

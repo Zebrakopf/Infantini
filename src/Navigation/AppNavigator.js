@@ -57,7 +57,8 @@ function BottomTabScreens(props) {
       <BottomTabNavigator.Navigator screenOptions={defaultNavigationOptions} tabBarOptions= {{
         activeTintColor: Colors.primary,
         inactiveTintColor: '#bbb',
-        style:{borderWidth:0, borderColor:'#fff', backgroundColor:'#fff',borderTopColor: 'transparent', elevation:0}
+        style:{borderWidth:0, borderColor:'#fff', backgroundColor:'#fff',borderTopColor: 'transparent', elevation:0,zIndex:1},
+        keyboardHidesTabBar:true
     }}>
         <BottomTabNavigator.Screen name="Home" component={HomeScreen} />
         <BottomTabNavigator.Screen name="Logging" component={LoggingScreen}/>
@@ -92,6 +93,7 @@ return(
       <RootStack.Screen name="Tabs" component={BottomTabScreens} screenOptions={defaultNavigationOptions}/>
       <RootStack.Screen name="DateInput" component={DateRangeInput} screenOptions={defaultNavigationOptions}/>
       <RootStack.Screen name="Settings" component={SettingsScreen} screenOptions={defaultNavigationOptions}/>
+      <RootStack.Screen name="LoggingModal" component={EventModal} screenOptions={defaultNavigationOptions}/>
     </RootStack.Navigator>
   </NavigationContainer>
   )

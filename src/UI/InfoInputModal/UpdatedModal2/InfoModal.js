@@ -5,7 +5,6 @@ import Colors from '../../../../constants/Colors'
 import DurationSelect from './DurationSelect'
 import DurationSelect_Sec from './DurationSelect_Sec'
 import DescriptionInput from './DescriptionInput'
-import TagInput from './TagInput'
 import InfoPage from './infoPage'
 import Icon from 'react-native-vector-icons/Ionicons';
 import ModalTabs from './modalTabs_rounded'

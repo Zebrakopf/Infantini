@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
 import moment from 'moment'
 
 import {View,Text, StyleSheet} from 'react-native'
@@ -8,7 +7,8 @@ import CalcTimeLineBox from './calcTimeLineBox'
 import Colors from '../../constants/EventColors'
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as scale from 'd3-scale'
-
+import {connect } from 'react-redux';
+import * as eventActions from '../store/actions/events'
 
 
 
@@ -21,16 +21,16 @@ const selectBoxes = (evt, currentDateStart, currentDateEnd) =>{
   if (moment(evt.timeStamp.endDateObj).isBetween(currentDateStart, currentDateEnd)){
     //event starts before this hour and end in this hour
     duration = moment(evt.timeStamp.endDateObj).diff(moment(currentDateStart),'minutes')
-    return ({duration: duration, id: evt.id, startTime: 0, category: evt.category, qualifier: evt.qualifie})
+    return ({duration: duration, id: evt.id, startTime: 0, category: evt.category, qualifier: evt.qualifier})
   }
   if(moment(evt.timeStamp.startDateObj).isBetween(currentDateStart, currentDateEnd)){
     //event starts in the hour but ends after
     duration = currentDateEnd.diff(moment(evt.timeStamp.startDateObj),'minutes')
-    return ({duration: duration, id: evt.id, startTime: evt.startTime, category: evt.category, qualifier: evt.qualifie})
+    return ({duration: duration, id: evt.id, startTime: evt.startTime, category: evt.category, qualifier: evt.qualifier})
     }
   if(moment(evt.timeStamp.startDateObj).isBefore(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isAfter(currentDateEnd)){
     // event starts before and ends after hour
-      return ({duration: 60, id: evt.id, startTime: 0, category: evt.category, qualifier: evt.qualifie})
+      return ({duration: 60, id: evt.id, startTime: 0, category: evt.category, qualifier: evt.qualifier})
     }
   }
 
@@ -62,6 +62,7 @@ class TimeLine extends Component{
     })
   }
   componentDidUpdate(previousProps, previousState){
+    console.log('timeline updaes')
     let selectedBox = 0
     if(this.props.selectedEvent.info){
       selectedBox = this.props.selectedEvent.info[0].id
@@ -152,7 +153,7 @@ class TimeLine extends Component{
 
 
   render(){
-
+    //console.log(this.props.events)
     return(
     <View onLayout={this.props.setDropValues} style={[{backgroundColor:"#fff", width:this.props.screenWidth*0.9,flexDirection:"row", borderWidth:1, borderRadius:3, borderColor:"black", elevation:3,
     height:this.props.screenHeight*0.2,marginTop: this.props.screenHeight*0.10, marginLeft:this.props.screenWidth*0.05, marginRight:this.props.screenWidth*0.05 }]}>
@@ -221,5 +222,19 @@ const styles = StyleSheet.create({
 
 })
 
+const mapStateToProps = state => {
+  return {
+    events: state.events.todaysEvents ? state.events.todaysEvents : state.events.allEvents
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddEvent: (category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp) => dispatch(eventActions.addEvent(category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp)),
+    onDeleteEvent: (id) => dispatch(eventActions.deleteEvent(id)),
+    onUpdateEvent: (id, category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp) => dispatch(eventActions.updateEvent(id, category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp)),
+    onDayChange : () => dispatch(eventActions.updateCurrentEvents())
+  };
+}
 
-export default TimeLine
+
+export default connect(mapStateToProps, mapDispatchToProps) (TimeLine)

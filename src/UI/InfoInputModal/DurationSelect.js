@@ -30,7 +30,6 @@ const DurationSelect = props =>{
     switch (buttonID){
       case "HoursDown":
         scroll = xHours - boxHeight*0.3
-        console.log(scroll, "called")
         if(xHours !== 0){
         setXHours(scroll)
         scrollerHoursRef.scrollTo({x:0,y:scroll})}

@@ -3,11 +3,11 @@ import {View, StyleSheet, Dimensions, Text, TouchableOpacity} from "react-native
 import PanEvent from '../../UI/panEvent'
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../../../constants/Colors'
-import LoggingTabs from '../../components/LoggingRing'
-import CircleMenue from '../../components/circleMenue'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range';
 
+import {connect } from 'react-redux';
+import * as eventActions from '../../store/actions/events'
 const moment = extendMoment(Moment);
 
 
@@ -31,7 +31,6 @@ class EventContainer extends Component{
       currentHour = currentHour > 24 ? currentHour - 24 : currentHour
       endTime = endTime-addedHours*60
       if (endTime < 10){
-        console.log(startTime, " last else ",endTime)
 
         endTime = "0" + endTime
       }
@@ -88,7 +87,6 @@ class EventContainer extends Component{
       const range = moment.range(evt.timeStamp.startDateObj,evt.timeStamp.endDateObj)
       overlap = range.overlaps(newRange)}
     })
-    console.log("overlap?: ", overlap)
     return overlap
   }
   render(){
@@ -103,9 +101,7 @@ class EventContainer extends Component{
     if(this.state.showInfo){
       showInfo = <View style={styles.infoContainer}><Text>{this.state.category} from {this.state.currentHour}:{this.state.infoTime} till {this.state.endTime}</Text></View>
     }
-    if(this.state.showLoggingTabs){
-      loggingTabs = <LoggingTabs lastEvents={this.props.events} onSelect={this.OpenModal} style={styles.bottomBar}/>
-    }
+
     return (
       <View style={{flex:1, height:"100%", width:"100%", backgroundColor:this.props.color, justifyContent:"center", alignItems: "center"}}>
         {showInfo}
@@ -170,6 +166,19 @@ const styles = StyleSheet.create(
   }
 )
 
+const mapStateToProps = state => {
+  return {
+    events: state.events.todaysEvents ? state.events.todaysEvents : state.events.allEvents
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddEvent: (category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp) => dispatch(eventActions.addEvent(category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp)),
+    onDeleteEvent: (id) => dispatch(eventActions.deleteEvent(id)),
+    onUpdateEvent: (id, category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp) => dispatch(eventActions.updateEvent(id, category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp)),
+
+  };
+}
 
 
-export default EventContainer;
+export default connect(mapStateToProps, mapDispatchToProps) (EventContainer);

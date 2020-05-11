@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {View, Text, StyleSheet, Dimensions, KeyboardAvoidingView} from 'react-native'
+
 import moment from 'moment'
 import ListItem from '../../components/listItem/listItem'
 import ButtonWithBackground from '../../UI/ButtonWithBackground'
@@ -90,6 +91,13 @@ class LoggingScreen extends Component {
         this.props.navigation.setParams({ index: null})
     }
   }
+    console.log('date updates',this.state.time.currentDay, prevState.time.currentDay)
+    if(this.state.time.currentDay !== prevState.time.currentDay){
+      console.log('new day')
+      let startDateObj = moment({ year :this.state.time.currentYear , month :this.state.time.currentMonthN - 1, day :this.state.time.currentDay,
+                            hour :(parseInt(this.state.time.currentHour)), minute :0, second :0, millisecond :0})
+      this.props.onDayChange(startDateObj)
+    }
   }
   componentDidMount(){
     const date = moment()//.add(moment().utcOffset(),"m")
@@ -240,7 +248,9 @@ class LoggingScreen extends Component {
          showModal:true,
          latestCategory: category
        }
-     })}
+     })
+     this.props.navigation.navigate('LoggingModal',{category:category, onPressCancel:this.CancelModal, onPressAccept:this.AcceptModal})
+   }
    }
    setDropZoneValues = (event)=> {
      const theEvent = event.nativeEvent.layout
@@ -265,16 +275,7 @@ class LoggingScreen extends Component {
                         endDateObj: moment({ year :this.state.time.currentYear , month :this.state.time.currentMonthN - 1, day :this.state.time.currentDay,
                                     hour :(parseInt(this.state.time.currentHour)), minute : Math.round(startTime), second :0, millisecond :0}).add(moment().utcOffset(),"m").add(this.state.dataPicker.length,"m")                    }
 
-    console.log("reset event",this.state.latestCategory,
-    startTime,
-    this.state.dataPicker.length,
-    this.state.dataPicker.qualifier,
-    this.state.dataPicker.intensity,
-    this.state.dataPicker.fallAsleep,
-    this.state.dataPicker.success,
-    this.state.dataPicker.description,
-    this.state.screenWidth*0.9*0.08333*(this.state.dataPicker.length/5),
-    timeStamp)
+
     this.props.onAddEvent(
       this.state.latestCategory,
       startTime,
@@ -305,10 +306,7 @@ class LoggingScreen extends Component {
     return startTimeinMin
   }
 
-  checkOnOptions = () =>{
-    alert()
-    console.log(JSON.stringify(this.props.events.map(event =>({event}))))
-  }
+
   updateDisplayedBoxes = (boxes) =>{
     this.setState({
       currentHourBoxes: boxes
@@ -343,13 +341,13 @@ class LoggingScreen extends Component {
       timeLine = (
         <TimeLine screenWidth={this.state.screenWidth} screenHeight={this.state.screenHeight}
                   setDropValues={this.setDropZoneValues} time={this.state.time} deleteEvent={this.onLongEventPress}
-                  updateBoxes={this.updateDisplayedBoxes} events={this.props.events} selectedEvent={this.state.showDeleteModal} />
+                  updateBoxes={this.updateDisplayedBoxes} selectedEvent={this.state.showDeleteModal} />
       )
     }
     if(this.state.showModal){
-      eventModal = (
-        <EventModal category={this.state.latestCategory} length={this.state.dataPicker.length} onPressCancel={this.CancelModal} onPressAccept={this.AcceptModal}/>
-      )
+      eventModal = null //(
+      //   <EventModal category={this.state.latestCategory} onPressCancel={this.CancelModal} onPressAccept={this.AcceptModal}/>
+      // )
     }
     else{
       eventModal = null
@@ -360,14 +358,14 @@ class LoggingScreen extends Component {
         {//<FadeBackground />
         }
         <View style={{width:"100%",height:"100%", justifyContent:"center", alignItems:"center"}}>
-          <Header backButton={false} title={"Logging"} onClose={this.props.navigation.navigate} onNavigate={this.props.navigation.navigate} events={this.props.events}/>
+          <Header backButton={false} title={"Logging"} onClose={this.props.navigation.navigate} onNavigate={this.props.navigation.navigate}/>
           <View style = {styles.dateContainer}>
             <DatePicker currentDay={this.state.time.currentDay} currentMonth={this.state.time.currentMonth} currentHour={this.state.time.currentHour}
                         nextDay={this.state.time.nextDay} prevDay={this.state.time.prevDay} nextHour={this.state.time.nextHour} prevHour={this.state.time.prevHour}
             pressChange={this.changeTime} colorTest={"transparent"} date={this.state.time.date}/>
           </View>
           <EventContainer dropZoneValues={this.state.dropZoneValues} onVanish={this.resetEvent} calcTime={this.calcTime} currentHour={this.state.time.currentHour}
-            latestCategory={this.state.latestCategory} screenWidth={this.state.screenWidth} dataPickerlength={this.state.dataPicker.length} showEvent={this.state.showEvent}  time={this.state.time} events={this.props.events} color={'transparent'}>
+            latestCategory={this.state.latestCategory} screenWidth={this.state.screenWidth} dataPickerlength={this.state.dataPicker.length} showEvent={this.state.showEvent}  time={this.state.time} color={'transparent'}>
             <View style={styles.logContainer} onLayout={(event) => this.tellmeStuff(event)}>
               {timeLine}
               <View style={{width:'100%', height:'35%'}}/>
@@ -375,7 +373,6 @@ class LoggingScreen extends Component {
             </View>
           </EventContainer>
         </View>
-        {eventModal}
         {deleteConfirmModal}
       </View>
     )
@@ -426,8 +423,10 @@ const mapDispatchToProps = dispatch => {
     onAddEvent: (category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp) => dispatch(eventActions.addEvent(category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp)),
     onDeleteEvent: (id) => dispatch(eventActions.deleteEvent(id)),
     onUpdateEvent: (id, category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp) => dispatch(eventActions.updateEvent(id, category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp)),
-
+    onDayChange : (day) => dispatch(eventActions.updateCurrentEvents(day))
   };
 }
+
+
 
 export default connect(mapStateToProps, mapDispatchToProps) (LoggingScreen);

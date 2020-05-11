@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {View, TouchableWithoutFeedback, Animated, Platform, Text} from 'react-native'
 import * as Font from 'expo-font'
 import Icon from 'react-native-vector-icons/Ionicons'
+import CustomIcon from '../../../Assets/CustomIcon'
 
 import constants from '../constants'
 
@@ -47,7 +48,6 @@ export default class extends Component {
     if (Platform.OS === 'ios') {
       size += 1;
     }
-
     return <TouchableWithoutFeedback
       style={{
         height: buttonSize,
@@ -110,11 +110,20 @@ export default class extends Component {
           justifyContent:"center",
           alignItems:"center",
         }]}>
-          <Icon
+
+        {  icon == "md-add" || icon == "md-close" ?<Icon
             color={color || '#FFF'}
             name={icon}
             size={iconSize}
           />
+          :
+          <CustomIcon
+              color={color || '#FFF'}
+              name={icon}
+              size={iconSize}
+            />
+          }
+
           {title === '' ? null : <Text style={{  color:"white",fontFamily:"Roboto", fontSize:12}}>{title}</Text>}
         </View>
       </Animated.View>

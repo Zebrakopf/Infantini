@@ -8,6 +8,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { sendEmail } from './sendEmail';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
+import {connect } from 'react-redux';
+import * as eventActions from '../store/actions/events'
 
 const moment = extendMoment(Moment)
 
@@ -85,4 +87,20 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Header
+const mapStateToProps = state => {
+  return {
+    events: state.events.allEvents
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddEvent: (category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp) => dispatch(eventActions.addEvent(category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp)),
+    onDeleteEvent: (id) => dispatch(eventActions.deleteEvent(id)),
+    onUpdateEvent: (id, category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp) => dispatch(eventActions.updateEvent(id, category, start, duration, qualifier, intensity, fallAsleep, success, description, size, timeStamp)),
+
+  };
+}
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps) (Header);

@@ -11,6 +11,7 @@ import LoggingScreen from '../Screens/Logging/LoggingScreen'
 import DataScreen from '../Screens/Data/DataScreen'
 import SettingsScreen from '../Screens/Settings/SettingsScreen'
 import DateRangeInput from '../components/DateModal/DateRangeInput'
+import EventModal from '../UI/InfoInputModal/UpdatedModal2/EventModal_nav'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 

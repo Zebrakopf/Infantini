@@ -8,6 +8,10 @@ import ButtonWithBackground from '../../ButtonWithBackground'
 
 const InfoPage = (props) =>{
   let lastPage = props.lastScreen
+  const acceptContent = () =>{
+    props.onAccept()
+    props.onClose()
+  }
   return(
     <View style={props.style}>
       <View style={styles.titleLine}>
@@ -17,7 +21,7 @@ const InfoPage = (props) =>{
         {props.children}
       </View>
       <View style={styles.buttonLine}>
-        <ButtonWithBackground style={{...styles.buttonLeft,backgroundColor:props.ready ? 'green' :"#bbb"}} title={"Finish"} onPress={() =>{props.onAccept()}} disabled={!props.ready}><Text style={{color:props.ready ? '#fff' :"#E0E0E0", fontSize:18}}>Finish</Text></ButtonWithBackground>
+        <ButtonWithBackground style={{...styles.buttonLeft,backgroundColor:props.ready ? 'green' :"#bbb"}} title={"Finish"} onPress={() =>{acceptContent()}} disabled={!props.ready}><Text style={{color:props.ready ? '#fff' :"#E0E0E0", fontSize:18}}>Finish</Text></ButtonWithBackground>
         <ButtonWithBackground style={{...styles.buttonRight,backgroundColor:lastPage ? "#bbb" : Colors.primary}} title={"Next"} onPress={() =>{props.onNext()}} disabled={lastPage}><Text style={{color:lastPage ? "#E0E0E0" : "#fff", fontSize:18}}>Next</Text></ButtonWithBackground>
       </View>
     </View>

@@ -1,7 +1,7 @@
 export const DELETE_EVENT = 'DELETE_EVENT'
 export const ADD_EVENT = 'ADD_EVENT'
 export const UPDATE_EVENT = 'UPDATE_EVENT'
-
+export const PULL_CURRENT_EVENTS = 'PULL_CURRENT_EVENTS'
 export const deleteEvent = eventId => {
   return { type: DELETE_EVENT, eid: eventId}
 }
@@ -35,4 +35,9 @@ export const updateEvent = (id, category, start, duration, qualifier, intensity,
     size,
     timeStamp
   }}
+}
+
+
+export const updateCurrentEvents = (day) =>{
+  return {type: PULL_CURRENT_EVENTS, day}
 }

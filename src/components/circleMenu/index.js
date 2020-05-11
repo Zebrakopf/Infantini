@@ -3,7 +3,6 @@
 
 import React, {Component} from 'react'
 import {View, Animated} from 'react-native'
-
 import {ActionIcon, TouchableIcon} from './components'
 import constants from './constants'
 

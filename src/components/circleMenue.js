@@ -2,40 +2,41 @@ import React, {Component} from 'react'
 import {Dimensions} from 'react-native'
 import CircleMenu from './circleMenu'
 import Colors from '../../constants/EventColors'
+import CustomIcon from '../Assets/CustomIcon.js'
 
 import MainColors from '../../constants/Colors'
 
 class CircleMenue extends Component {
     items = [
       {
-        name: 'md-sad',
+        name: 'weinen-infantino-02',
         color: Colors.cry.grumpy,
         title:'Cry'
       },
       {
-        name: "md-bed",
+        name: "Schlafen-infantino-02",
         color: Colors.sleep,
         title:'Sleep'
       },
       {
-        name: 'md-restaurant',
+        name: 'essen-infantino-02',
         color: Colors.food,
         title:'Food'
       },
       {
-        name: 'md-happy',
+        name: 'positiv-infantino-02',
         color: Colors.positives,
         title:'Positives'
       },
       {
-        name: 'md-mic-off',
+        name: 'beruhigen-infantino-02',
         color: Colors.soothing,
         title:'Soothing'
       },
       {
-        name: 'md-planet',
+        name: 'windel-infantino-02',
         color: Colors.diaper,
-        title:'Diaper'
+        title:'Diapers'
       }
     ];
 
@@ -44,26 +45,23 @@ class CircleMenue extends Component {
         this.props.onSelect("Close")
         return null
       }
-      switch(this.items[index].name){
-        case 'md-sad':
+      switch(this.items[index].title){
+        case 'Cry':
           this.props.onSelect("Cry")
           break;
-        case "md-bed":
+        case "Sleep":
           this.props.onSelect("Sleep")
           break;
-        case 'md-restaurant':
+        case 'Food':
           this.props.onSelect("Food")
           break;
-        case 'md-happy':
+        case 'Positives':
           this.props.onSelect("Positives")
           break;
-        case 'md-happy':
+        case 'Diapers':
           this.props.onSelect("Diapers")
           break;
-        case 'md-planet':
-          this.props.onSelect("Diapers")
-          break;
-        case 'md-mic-off':
+        case 'Soothing':
           this.props.onSelect("Soothing")
           break;
       }
@@ -72,7 +70,6 @@ class CircleMenue extends Component {
     render() {
       let height = Dimensions.get('window').height
       let width = Dimensions.get('window').width
-      console.log(height, width)
     	return <CircleMenu
             bgColor={MainColors.primary}
             items={this.items}

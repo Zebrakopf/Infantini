@@ -6,7 +6,7 @@
  * @flow
  */
 //https://itnext.io/react-native-why-you-should-be-using-redux-persist-8ad1d68fa48b    .....to see persist explanation
-import React, {Fragment, useState, useEffect} from 'react';
+import React, {Fragment, useState, useEffect,Component} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -24,6 +24,8 @@ import eventsReducer from './src/store/reducers/events';
 import tagsReducer from './src/store/reducers/tags';
 import AppNavigator from './src/Navigation/AppNavigator'
 import { persistStore, persistReducer } from 'redux-persist';
+import { AppLoading } from 'expo';
+import * as Font from 'expo-font';
 
 const rootReducer = combineReducers({
   events: eventsReducer,
@@ -52,8 +54,11 @@ const store = createStore(persistedReducer)
 // Middleware: Redux Persist Persister
 let persistor = persistStore(store);
 
+let customFonts = {
+  'customIcons': require('./assets/fonts/icomoon.ttf'),
+};
 
-const App = () => {
+class App extends Component {
   //persistor.purge()
   // console.log("cleared")
   //to clear async storage fully I have to relaod app once with this code running.. then close the app and reload it (with code running) one more time
@@ -75,16 +80,35 @@ const App = () => {
   //   handleFirstRender(false)
   //
   //   },[])
-  return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <StatusBar  backgroundColor="#59C2D2" barStyle="light-content" hidden={false} translucent={false}/>
-        <SafeAreaView style={{flex:1}}>
-          <AppNavigator/>
-        </SafeAreaView>
-      </PersistGate>
-    </Provider>
-  );
+  state = {
+   fontsLoaded: false,
+ };
+  async _loadFontsAsync() {
+  await Font.loadAsync(customFonts);
+  this.setState({ fontsLoaded: true });
+}
+
+componentDidMount() {
+  this._loadFontsAsync();
+}
+
+render() {
+  if (this.state.fontsLoaded) {
+    return (
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <StatusBar  backgroundColor="#59C2D2" barStyle="light-content" hidden={false} translucent={false}/>
+          <SafeAreaView style={{flex:1}}>
+            <AppNavigator/>
+          </SafeAreaView>
+        </PersistGate>
+      </Provider>
+    );
+  }
+  return(
+    <AppLoading />
+    )
+}
 };
 
 

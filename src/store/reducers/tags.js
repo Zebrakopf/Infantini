@@ -28,13 +28,10 @@ export default  (state = initialState, action) => {
   let tempState = null
   switch (action.type){
     case ADD_TAG:
-      console.log(action, state)
       if(action.tagData.tagGroup){
         tempState = state.allTags.defaultTags
-        console.log("the tempstate",tempState,state.allTags.defaultTags)
       }else{
         tempState = state.allTags.extraTags
-        console.log("the tempstate",tempState)
       }
       switch (action.tagData.category){
         case "Cry":
@@ -65,7 +62,6 @@ export default  (state = initialState, action) => {
       }
     case DELETE_TAG:
       let newState = {...state}
-        console.log(action, state)
         if(action.tagData.tagGroup){
           tempState = state.allTags.defaultTags
         }else{

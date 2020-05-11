@@ -7,25 +7,17 @@ import InfoModal from './InfoModal'
 import ButtonWithBackground from '../../ButtonWithBackground'
 
 
-class EventModal extends Component{
-  constructor(props){
-    super(props)
-    this.state={
-      infoNeeded:""
-    }
+const EventModal = ({ navigation, route }) => {
 
-}
+  const {onPressAccept} = route.params
+  const {category} = route.params
 
-
-
-
-  render(){
   let screenHeight = Dimensions.get("window").height
   return(
-    <View style={styles.modalContainer} onStartShouldSetResponder={(event) => {if((event.nativeEvent.pageY /screenHeight) < 0.4  || (event.nativeEvent.pageY /screenHeight) > 0.9){this.props.onPressCancel()}}}>
+    <View style={styles.modalContainer} onStartShouldSetResponder={(event) => {if((event.nativeEvent.pageY /screenHeight) < 0.1  || (event.nativeEvent.pageY /screenHeight) > 0.8){navigation.pop()}}}>
     <ScrollView contentContainerStyle={{width:"100%",height:'100%',justifyContent:'flex-start',paddingTop:'40%'}}>
 
-      <InfoModal onClose={this.props.onPressCancel} onAccept={this.props.onPressAccept} category={this.props.category}/>
+      <InfoModal onClose={navigation.pop} onAccept={onPressAccept} category={category}/>
 
     </ScrollView>
     </View>
@@ -33,7 +25,6 @@ class EventModal extends Component{
   )
 }
 
-}
 
 //onStartShouldSetResponder={(event) => {if((event.nativeEvent.pageY /screenHeight) < 0.25  || (event.nativeEvent.pageY /screenHeight) > 0.85){this.props.onPressCancel()}}} <---this line cancels the modal if the user presses next to it
 
@@ -75,7 +66,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor:"rgba(0,0,0,0.9)",
+    backgroundColor:"rgba(0,0,0,0.8)",
     justifyContent:"center",
     alignItems: "center",
     elevation:10

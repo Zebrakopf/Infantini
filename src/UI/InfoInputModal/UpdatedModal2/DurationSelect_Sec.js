@@ -68,11 +68,9 @@ const DurationSelect_Sec = props =>{
     let minutes = 0
     if (xHours !== 0){
       hours = lengthsHours[(Math.round(xHours/(boxHeight*0.3)))]
-      console.log(hours)
     }
     if (xMinutes !== 0){
       minutes = lengthsMinutes[Math.round((xMinutes/(boxHeight*0.3)))]
-      console.log(minutes)
     }
     var duration = hours*60 + minutes
     return (

@@ -10,7 +10,6 @@ const DefaultTagSelector = (props) =>{
 
 
   const tagSelector = (category) =>{
-    console.log('---------------------tags',props.tags)
     let tempTags = props.default ? props.tags.defaultTags : props.tags.extraTags
     switch(category){
       case "Cry":

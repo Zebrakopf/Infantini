@@ -65,7 +65,7 @@ export class PanEvent extends Component {
           },
 
         onPanResponderRelease: (event, gestureState) => {
-          console.log(this.props.currentBoxes)
+          console.log("When is this called")
           if (this.isDropZone(gestureState, event) && !this.props.checkForOverlap(event.nativeEvent.locationX, gestureState.moveX)){
 
             this.setState({

@@ -16,15 +16,15 @@ const times = ['24:00 - 01:00','01:00 - 02:00','02:00 - 03:00','03:00 - 04:00','
 
 
 class HomeScreen extends Component {
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
   this.state={
     refresh:false,
     times: [...times]
   }
 }
   componentDidMount(){
-
+    this.props.onDayChange(moment())
   }
   componentDidUpdate(previousProps, previousState){
     let index = moment().get('hour') >= 3 ? moment().get('hour')-3 : 0
@@ -36,7 +36,6 @@ class HomeScreen extends Component {
       this.refresh()}
   }
   refresh = () =>{
-    console.log("refresh", this.state.refresh)
     this.setState(prevState => ({
        ...prevState,
      refresh:!prevState.refresh,
@@ -48,7 +47,7 @@ class HomeScreen extends Component {
   render(){
     return(
         <View style={styles.container} onLayout={()=>{this.refresh()}}>
-        <Header backButton={false} title={"Home"} refresh={this.refresh} events={this.props.events} onNavigate={this.props.navigation.navigate}/>
+        <Header backButton={false} title={"Home"} refresh={this.refresh}  onNavigate={this.props.navigation.navigate}/>
         <View style = {styles.elenaContainer}>
           <Text style={styles.titleText}>{moment().format('ddd, Do MMMM')}</Text>
         </View>
@@ -66,7 +65,7 @@ class HomeScreen extends Component {
               </View>
             </View>
         </View>
-        <Image style={styles.image} source={logo} resizeMode={"contain"}/>
+        <Image style={styles.image} source={logo} resizeMode={"contain"} fadeDuration={0}/>
         </View>
 
 
@@ -142,13 +141,14 @@ const styles = StyleSheet.create({
 })
 const mapStateToProps = state => {
   return {
-    events: state.events.allEvents
+    events: state.events.todaysEvents ? state.events.todaysEvents : state.events.allEvents
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
     onAddEvent: (category, start, duration, qualifier, description, size, timeStamp) => dispatch(eventActions.addEvent(category, start, duration, qualifier, description, size, timeStamp)),
-    onDeleteEvent: (id) => dispatch(eventActions.deleteEvent(id))
+    onDeleteEvent: (id) => dispatch(eventActions.deleteEvent(id)),
+    onDayChange : (day) => dispatch(eventActions.updateCurrentEvents(day))
   };
 }
 

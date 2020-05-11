@@ -36,7 +36,6 @@ onWiggleCompletion = () =>{
 }
 handleWiggleAnimation = () => {
 // A loop is needed for continuous animation
-console.log("startWiggle")
 
    Animated.sequence([
     // start rotation in one direction (only half the time is needed)
@@ -66,7 +65,6 @@ componentWillUnmount(){
     }
     if (this.props.asleepDuration){
       let asleepDuration = this.props.asleepDuration[this.props.asleepDuration.length-1].fallAsleepDuration
-      console.log("duration:", this.props.duration - asleepDuration)
       return(
         <TouchableOpacity  style = {[ styles.boxContainer, {width: timeScale(this.props.duration), height: this.props.dropZoneHeight/4, marginLeft:timeScale(this.props.Position)}]}
                             onLongPress={this.onLongPress}>

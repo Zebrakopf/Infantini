@@ -22,32 +22,38 @@ class DataScreen extends Component {
     //     <View style={styles.filter}>
     //     </View>
     //   </View>)
+    let focus = this.props.navigation.isFocused()
+    console.log('rerender datascreen')
+    if(focus){
+      return(
 
-    return(
-    <View style={styles.container}>
-      <Header backButton={false} title={"Data"}events={this.props.events} onNavigate={this.props.navigation.navigate}/>
-      <View style={[styles.container,{flex:0, height: "92%", width:"100%" }]}>
-        <ScrollView  horizontal disableIntervalMomentum style={styles.scroller} contentContainerStyle={{alignItems:"center", justifyContent:"center"}} snapToInterval={Dimensions.get("window").width*0.9}>
-          <View style={[styles.TemplateContainer,{justifyContent:'center',backgroundColor:'transparent'}]}>
-            {filterSelector}
-            <DataTemplate title={"See Data"} style={styles.information}>
-            </DataTemplate>
-          </View>
-          <View style={[styles.TemplateContainer, {padding:0}]}>
-            <DataTemplate title={"More Data"} style={styles.information}>
-            </DataTemplate>
-          </View>
-          <View style={styles.TemplateContainer}>
-              <AmountLogged data={this.props.events} graphHeight={height*0.6} graphWidth={width*0.8} graphMargin={width*0.05}/>
-          </View>
-          <View style={styles.TemplateContainer}>
-            <DataTemplate title={"Still More"} style={styles.information}>
-            </DataTemplate>
-          </View>
-        </ScrollView>
+      <View style={styles.container}>
+        <Header backButton={false} title={"Data"} onNavigate={this.props.navigation.navigate}/>
+        <View style={[styles.container,{flex:0, height: "92%", width:"100%" }]}>
+          <ScrollView  horizontal disableIntervalMomentum style={styles.scroller} contentContainerStyle={{alignItems:"center", justifyContent:"center"}} snapToInterval={Dimensions.get("window").width*0.9}>
+            <View style={[styles.TemplateContainer,{justifyContent:'center',backgroundColor:'transparent'}]}>
+              {filterSelector}
+              <DataTemplate title={"See Data"} style={styles.information}>
+              </DataTemplate>
+            </View>
+            <View style={[styles.TemplateContainer, {padding:0}]}>
+              <DataTemplate title={"More Data"} style={styles.information}>
+              </DataTemplate>
+            </View>
+            <View style={styles.TemplateContainer}>
+                <AmountLogged data={this.props.events} graphHeight={height*0.6} graphWidth={width*0.8} graphMargin={width*0.05}/>
+            </View>
+            <View style={styles.TemplateContainer}>
+              <DataTemplate title={"Still More"} style={styles.information}>
+              </DataTemplate>
+            </View>
+          </ScrollView>
+        </View>
       </View>
-    </View>
-  )
+    )
+  }else{
+    return null
+  }
 }}
 
 const styles = StyleSheet.create({

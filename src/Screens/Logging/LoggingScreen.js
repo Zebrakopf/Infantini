@@ -60,7 +60,7 @@ class LoggingScreen extends Component {
     }
     if(this.props.route.params){
       let {index} = this.props.route.params
-      if(index)
+      if(index || index === 0)
       {
         const date = moment().hour(index)//.add(moment().utcOffset(),"m")
         let prevHour = date.clone()

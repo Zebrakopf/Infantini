@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react'
-import {View, Text, StyleSheet, Dimensions, Animated,Easing,TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, Dimensions, Animated,Easing,TouchableOpacity, ScrollView} from 'react-native'
 import moment from 'moment'
 import Colors from '../../constants/Colors'
 import ButtonWithBackground from './ButtonWithBackground'
@@ -33,6 +33,35 @@ const DeleteConfirmModal = (props) =>{
                     props.onCancel()
                     props.onDelete(deletedItemId)
                     })
+  }
+
+  let selectContent = (event) => {
+    switch(event.category){
+      case 'Cry':{
+        return(
+          <View style={{flexDirection:"row",justifyContent:'flex-start',alignItems:"center", width:"100%",marginTop:20,marginLeft:'20%'}}>
+            <Text style={{color:'#fff', fontSize:15,marginTop:0}}>Intensity: {event.intensity}</Text>
+          </View>
+        )
+      }
+      case 'Soothing':{
+        return(
+          <View style={{flexDirection:"row",justifyContent:'flex-start',alignItems:"center", width:"100%",marginTop:20,marginLeft:'20%'}}>
+            <Text style={{color:'#fff', fontSize:15,marginTop:0}}>Success: {event.success}</Text>
+          </View>
+        )
+      }
+      case 'Sleep':{
+        return(
+          <View style={{flexDirection:"row",justifyContent:'flex-start',alignItems:"center", width:"100%",marginTop:20,marginLeft:'20%'}}>
+            <Text style={{color:'#fff', fontSize:15,marginTop:0}}>Time till sleep: {event.fallAsleep} minutes</Text>
+          </View>
+        )
+      }
+    }
+    return ( //default
+      null
+    )
   }
   useEffect(()=>{
     if(firstRender){
@@ -85,6 +114,7 @@ const DeleteConfirmModal = (props) =>{
         </View>
       </Animated.View>
   )}
+  if(props.info){
   return ( <Animated.View style={[styles.container,{transform: [{
                                                         translateX: animatedValue.interpolate({
                                                           inputRange: [0, 1],
@@ -94,11 +124,25 @@ const DeleteConfirmModal = (props) =>{
       <View style={[styles.row,{alignItems:'flex-start',paddingTop:10,height:"20%"}]}>
         <Text style={{color:'#fff', fontWeight:'bold', fontSize:19,}}>Permanently Delete {props.info ? props.info[0].category : ''} Event?</Text>
       </View>
-      <View style={[styles.row,{justifyContent:'center',alignItems:"flex-start",height:"47%"}]}>
+      <View style={[styles.row,{justifyContent:'flex-start',alignItems:"center",height:"47%",flexDirection:'column'}]}>
         <View style={{flexDirection:"row",justifyContent:'center',alignItems:"center", width:"100%"}}>
           <Text style={{color:'#fff', fontSize:15,marginTop:0}}>{ props.info ? moment(props.info[0].timeStamp.startDateObj).subtract(moment().utcOffset(),'m').format("HH:mm"): ''}</Text>
           <View style={styles.timebar}/>
           <Text style={{color:'#fff', fontSize:15,}}>{ props.info ? moment(props.info[0].timeStamp.endDateObj).subtract(moment().utcOffset(),'m').format("HH:mm"): ''}</Text>
+        </View>
+        {selectContent(props.info[0])}
+        <View style={{flexDirection:"row",justifyContent:'center',alignItems:"center", width:"100%",marginTop:20,marginLeft:'20%'}}>
+          <Text style={{color:'#fff', fontSize:15,marginTop:0}}>Tags: </Text>
+          <ScrollView contentContainerSTyle={{height:30,alignItems:'flex-start', justifyContent:'flex-start', flexDirection:'row'}} horizontal={true} showsHorizontalScrollIndicator={false}>
+          <>
+            {
+                props.info[0].qualifier.map((tag,idx)=>{
+                  return (<Text style={{color:'#fff', fontSize:15,marginTop:0}} key={idx}>{tag}{idx ===  props.info[0].qualifier.length -1 ? '' : ',' } </Text>)
+                })
+                }
+
+            </>
+          </ScrollView>
         </View>
       </View>
       <View style={[styles.row,{padding:0,paddingBottom:10}]}>
@@ -106,7 +150,8 @@ const DeleteConfirmModal = (props) =>{
         <ButtonWithBackground style={{...styles.buttonRight,backgroundColor:"red"}} title={"Next"} onPress={() =>{onDelete()}} ><Text style={{color:"#fff", fontSize:18}}>Yes</Text></ButtonWithBackground>
       </View>
     </Animated.View>)
-
+}
+return null
 }
 
 const windowWidth = Dimensions.get('window').width

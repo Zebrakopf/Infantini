@@ -287,7 +287,7 @@ const InfoModal = (props) =>{
   }
 
   return(
-    <KeyboardAvoidingView style={styles.container} behaviour={"height"}>
+    <KeyboardAvoidingView style={styles.container}>
       <ModalTabs style={{height:height*0.05, width:width*0.9, backgroundColor:"black"}} screenNames={tabName} currentTab={currentScroll/(Dimensions.get("window").width*0.9)} onTabClick={handleTabClick}/>
       <View style={styles.scrollContainer}>
         {modalContent}

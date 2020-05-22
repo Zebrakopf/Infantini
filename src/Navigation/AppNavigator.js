@@ -1,9 +1,10 @@
 import React from 'react'
-
+import {Easing} from 'react-native'
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { TransitionSpecs } from '@react-navigation/stack'
 import {Platform} from 'react-native'
 
 import HomeScreen from '../Screens/Home/HomeScreen'
@@ -58,8 +59,8 @@ function BottomTabScreens(props) {
       <BottomTabNavigator.Navigator screenOptions={defaultNavigationOptions} tabBarOptions= {{
         activeTintColor: Colors.primary,
         inactiveTintColor: '#bbb',
-        style:{borderWidth:0, borderColor:'#fff', backgroundColor:'#fff',borderTopColor: 'transparent', elevation:0,zIndex:1},
-        keyboardHidesTabBar:true
+        style:{borderWidth:0, borderColor:'#fff', backgroundColor:'#fff',borderTopColor: 'transparent', elevation:0,zIndex:-1},
+        keyboardHidesTabBar:false
     }}>
         <BottomTabNavigator.Screen name="Home" component={HomeScreen} />
         <BottomTabNavigator.Screen name="Logging" component={LoggingScreen}/>
@@ -67,27 +68,28 @@ function BottomTabScreens(props) {
       </BottomTabNavigator.Navigator>
   )
 }
+
+const config = {
+  animation: 'timing',
+  config: {
+    duration:500,
+    easing:Easing.linear
+  },
+};
+
 function AppNavigator(props) {
 return(
   <NavigationContainer>
     <RootStack.Navigator screenOptions={{
+          gestureEnabled:true,
+          gestureDirection:'vertical',
+          transitionSpec:{
+            open:TransitionSpecs.TransitionIOSSpec,
+            close:TransitionSpecs.TransitionIOSSpec
+          },
           cardStyle: { backgroundColor: 'transparent' },
           cardOverlayEnabled: true,
-          cardStyleInterpolator: ({ current: { progress } }) => ({
-            cardStyle: {
-              opacity: progress.interpolate({
-                inputRange: [0, 0.5, 0.9, 1],
-                outputRange: [0, 0.25, 0.7, 1],
-              }),
-            },
-            overlayStyle: {
-              opacity: progress.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, 0.5],
-                extrapolate: 'clamp',
-              }),
-            },
-          }),
+
         }}
       mode="modal"
       headerMode="none">

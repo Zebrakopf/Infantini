@@ -17,7 +17,7 @@ export async function sendEmail(to, subject, body, options = {}) {
         cc: cc,
         bcc: bcc
     });
-
+    console.log(query, " query length: ",query.length)
     if (query.length) {
         url += `?${query}`;
     }
@@ -25,16 +25,18 @@ export async function sendEmail(to, subject, body, options = {}) {
     // check if we can use this link
     const canOpen = await Linking.canOpenURL(url);
 
+    console.log(query, " query length: ",query.length,"", canOpen)
     if (!canOpen) {
         throw new Error('Provided URL can not be handled');
     }
+    Linking.openURL(url).then(()=>{}).catch((err)=>{alert("error");
+                                                     console.log("mail error:",err)});
 
-    return Linking.openURL(url);
 }
 
 
 // example.js
-// 
+//
 // import { sendEmail } from './send-email';
 //
 // sendEmail(
@@ -45,3 +47,8 @@ export async function sendEmail(to, subject, body, options = {}) {
 // ).then(() => {
 //     console.log('Your message was successfully sent!');
 // });
+
+//lenght: 324462 <-funktioniert nicht
+//lenght: 27059 <-funktioniert nicht
+//lenght: 2583032 <- funktioniert
+//lenght: 209133 <- funktioniert

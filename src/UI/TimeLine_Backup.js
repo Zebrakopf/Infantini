@@ -14,24 +14,30 @@ import * as eventActions from '../store/actions/events'
 
 const selectBoxes = (evt, currentDateStart, currentDateEnd) =>{
   let duration = evt.duration
+
   if ( moment(evt.timeStamp.startDateObj).isBetween(currentDateStart, currentDateEnd) &&  moment(evt.timeStamp.endDateObj).isBetween(currentDateStart, currentDateEnd) || ( moment(evt.timeStamp.startDateObj).isSame(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isSame(currentDateEnd))){
       //event starts and ends within this hour
+      console.log('1',evt)
       return ({duration: duration, id: evt.id, startTime: evt.startTime, category: evt.category, qualifier: evt.qualifier})
   }
   if (moment(evt.timeStamp.endDateObj).isBetween(currentDateStart, currentDateEnd)){
     //event starts before this hour and end in this hour
+      console.log('2',evt)
     duration = moment(evt.timeStamp.endDateObj).diff(moment(currentDateStart),'minutes')
     return ({duration: duration, id: evt.id, startTime: 0, category: evt.category, qualifier: evt.qualifier})
   }
   if(moment(evt.timeStamp.startDateObj).isBetween(currentDateStart, currentDateEnd)){
     //event starts in the hour but ends after
     duration = currentDateEnd.diff(moment(evt.timeStamp.startDateObj),'minutes')
+      console.log('3',evt)
     return ({duration: duration, id: evt.id, startTime: evt.startTime, category: evt.category, qualifier: evt.qualifier})
     }
-  if(moment(evt.timeStamp.startDateObj).isBefore(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isAfter(currentDateEnd)){
+  if((moment(evt.timeStamp.startDateObj).isBefore(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isAfter(currentDateEnd)) || moment(evt.timeStamp.startDateObj).isBefore(currentDateStart) && moment(evt.timeStamp.endDateObj).isSame(currentDateEnd)){
     // event starts before and ends after hour
+      console.log('4',evt)
       return ({duration: 60, id: evt.id, startTime: 0, category: evt.category, qualifier: evt.qualifier})
     }
+    return null
   }
 
 
@@ -83,8 +89,11 @@ class TimeLine extends Component{
 
 
     //const timeBoxes = timeBoxesDay.map(obj =>{return(selectBoxes(obj, this.props.time.currentHour))})
-    const timeBoxes = timeBoxesRaw.map(obj =>{return(selectBoxes(obj, currentDateStart, currentDateEnd))})
-
+    let timeBoxes = timeBoxesRaw.map(obj =>{return(selectBoxes(obj, currentDateStart, currentDateEnd))})
+    console.log(timeBoxes)
+    timeBoxes = timeBoxes.filter(function (el) {
+                                                return el != null; //remove timeboxes that do not belong to this day... could be the only step as well
+                                              });
       if (timeBoxes.length!==0){
         boxesCry = timeBoxes.map(obj => {
           if(obj.category === "Cry")

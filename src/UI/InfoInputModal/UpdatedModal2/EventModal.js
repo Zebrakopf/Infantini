@@ -22,12 +22,12 @@ class EventModal extends Component{
   render(){
   let screenHeight = Dimensions.get("window").height
   return(
-    <View style={styles.modalContainer} onStartShouldSetResponder={(event) => {if((event.nativeEvent.pageY /screenHeight) < 0.4  || (event.nativeEvent.pageY /screenHeight) > 0.9){this.props.onPressCancel()}}}>
-    <ScrollView contentContainerStyle={{width:"100%",height:'100%',justifyContent:'flex-start',paddingTop:'40%'}}>
+    <View style={styles.modalContainer}>
+    <View style={{width:"100%",height:'100%',justifyContent:'flex-start',paddingTop:'40%'}}>
 
       <InfoModal onClose={this.props.onPressCancel} onAccept={this.props.onPressAccept} category={this.props.category}/>
 
-    </ScrollView>
+    </View>
     </View>
 
   )
@@ -71,11 +71,8 @@ const styles = StyleSheet.create({
     // alignItems: "center",
     width:'100%',
     height:"100%",
-    position:"absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor:"rgba(0,0,0,0.9)",
+
+    backgroundColor:"transparent",
     justifyContent:"center",
     alignItems: "center",
     elevation:10

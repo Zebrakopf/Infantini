@@ -221,10 +221,10 @@ const DateRangeInput = ({route, navigation}) =>{
 
         {renderDropDownStatus ? renderDropDown() : null}
         <View style={styles.nextMonthControls}>
-        <TouchableOpacity onPress={()=>{changeComponentDate(dateInfo.clone().subtract(1,'month'))}}>
+        <TouchableOpacity style={styles.button} onPress={()=>{changeComponentDate(dateInfo.clone().subtract(1,'month'))}}>
           <Ionicons name={"ios-arrow-back"} size={20} color={'#a1a1a1'}/>
         </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{changeComponentDate(dateInfo.clone().add(1,'month'))}}>
+          <TouchableOpacity style={styles.button} onPress={()=>{changeComponentDate(dateInfo.clone().add(1,'month'))}}>
             <Ionicons name={"ios-arrow-forward"} size={20} color={'#a1a1a1'}/>
           </TouchableOpacity>
         </View>
@@ -341,6 +341,11 @@ const styles = StyleSheet.create({
   text:{
     fontSize:12,
     color:"#fff"
+  },
+  button:{
+    width:25,
+    justifyContent:"center",
+    alignItems:'center'
   }
 })
 

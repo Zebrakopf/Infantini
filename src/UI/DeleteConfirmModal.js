@@ -56,31 +56,57 @@ const DeleteConfirmModal = (props) =>{
       }).start(() => {  })
     }
   },[props.active])
-  return(
-    <Animated.View style={[styles.container,{transform: [{
+
+
+  if(props.settings)
+    {return(
+      <Animated.View style={[styles.container,{transform: [{
+                                                          translateX: animatedValue.interpolate({
+                                                            inputRange: [0, 1],
+                                                            outputRange: [0, windowWidth]
+                                                          })
+                                                        }]}]}>
+        <View style={[styles.row,{alignItems:'flex-start',paddingTop:10}]}>
+          <Text style={{color:'#fff', fontWeight:'bold', fontSize:19,}}>Permanently Delete {props.settings ? 'all tags' : 'Event'}</Text>
+        </View>
+        <View style={[styles.row,{justifyContent:'space-between'}]}>
+        {
+          props.active ? props.settings ? <Text style={{color:'#fff', fontSize:15,}}> Reset all tags?</Text> :
+          <>
+          <Text style={{color:'#fff', fontSize:15,}}>Category: {props.info ? props.info[0].category : ''}</Text>
+          <View style={styles.timebar}/>
+          <Text style={{color:'#fff', fontSize:15,}}>start: { props.info ? moment(props.info[0].timeStamp.startDateObj).subtract(moment().utcOffset(),'m').format("HH:mm"): ''}</Text>
+          </> : null
+          }
+        </View>
+        <View style={[styles.row,{padding:0,paddingBottom:10}]}>
+          <ButtonWithBackground style={{...styles.buttonLeft,backgroundColor: Colors.compound}} title={"Cancel"} onPress={() =>{onCancel()}}><Text style={{color:'#fff', fontSize:18}}>No</Text></ButtonWithBackground>
+          <ButtonWithBackground style={{...styles.buttonRight,backgroundColor:"red"}} title={"Next"} onPress={() =>{onDelete()}} ><Text style={{color:"#fff", fontSize:18}}>Yes</Text></ButtonWithBackground>
+        </View>
+      </Animated.View>
+  )}
+  return ( <Animated.View style={[styles.container,{transform: [{
                                                         translateX: animatedValue.interpolate({
                                                           inputRange: [0, 1],
                                                           outputRange: [0, windowWidth]
                                                         })
                                                       }]}]}>
-      <View style={[styles.row,{alignItems:'flex-start',paddingTop:10}]}>
-        <Text style={{color:'#fff', fontWeight:'bold', fontSize:19,}}>Permanently Delete {props.settings ? 'all tags' : 'Event'}</Text>
+      <View style={[styles.row,{alignItems:'flex-start',paddingTop:10,height:"20%"}]}>
+        <Text style={{color:'#fff', fontWeight:'bold', fontSize:19,}}>Permanently Delete {props.info ? props.info[0].category : ''} Event?</Text>
       </View>
-      <View style={[styles.row,{justifyContent:'space-between'}]}>
-      {
-        props.active ? props.settings ? <Text style={{color:'#fff', fontSize:15,}}> Reset all tags?</Text> :
-        <>
-        <Text style={{color:'#fff', fontSize:15,}}>Category: {props.info ? props.info[0].category : ''}</Text>
-        <Text style={{color:'#fff', fontSize:15,}}>start: { props.info ? moment(props.info[0].timeStamp.startDateObj).subtract(moment().utcOffset(),'m').format("HH:mm"): ''}</Text>
-        </> : null
-        }
+      <View style={[styles.row,{justifyContent:'center',alignItems:"flex-start",height:"47%"}]}>
+        <View style={{flexDirection:"row",justifyContent:'center',alignItems:"center", width:"100%"}}>
+          <Text style={{color:'#fff', fontSize:15,marginTop:0}}>{ props.info ? moment(props.info[0].timeStamp.startDateObj).subtract(moment().utcOffset(),'m').format("HH:mm"): ''}</Text>
+          <View style={styles.timebar}/>
+          <Text style={{color:'#fff', fontSize:15,}}>{ props.info ? moment(props.info[0].timeStamp.endDateObj).subtract(moment().utcOffset(),'m').format("HH:mm"): ''}</Text>
+        </View>
       </View>
       <View style={[styles.row,{padding:0,paddingBottom:10}]}>
         <ButtonWithBackground style={{...styles.buttonLeft,backgroundColor: Colors.compound}} title={"Cancel"} onPress={() =>{onCancel()}}><Text style={{color:'#fff', fontSize:18}}>No</Text></ButtonWithBackground>
         <ButtonWithBackground style={{...styles.buttonRight,backgroundColor:"red"}} title={"Next"} onPress={() =>{onDelete()}} ><Text style={{color:"#fff", fontSize:18}}>Yes</Text></ButtonWithBackground>
       </View>
-    </Animated.View>
-  )
+    </Animated.View>)
+
 }
 
 const windowWidth = Dimensions.get('window').width
@@ -88,10 +114,10 @@ const windowHeight = Dimensions.get('window').height
 
 const styles = StyleSheet.create({
   container:{
-    height:windowHeight*0.25,
+    height:windowHeight*0.4,
     width:windowWidth,
     position:'absolute',
-    top:windowHeight * 0.6,
+    top:windowHeight * 0.4,
     backgroundColor:Colors.primary,
     opacity:0.9,
     zIndex:8
@@ -124,7 +150,15 @@ const styles = StyleSheet.create({
     borderRadius:20,
     marginLeft:'5%',
     elevation:2
-  }
+  },
+  timebar:{
+    width: "50%",
+    height:1,
+    backgroundColor:"#fff",
+    borderRadius:33,
+    marginLeft:8,
+    marginRight:8}
+
 })
 
 export default DeleteConfirmModal

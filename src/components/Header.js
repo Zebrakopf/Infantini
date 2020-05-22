@@ -6,6 +6,7 @@ import ButtonWithBackground from '../UI/ButtonWithBackground'
 import logo from '../Assets/logoWhite.png'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { sendEmail } from './sendEmail';
+import { saveFile } from './saveText';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import {connect } from 'react-redux';
@@ -25,8 +26,14 @@ const Header = (props) =>{
    if(startDate && endDate){
      let tempRange = moment.range(startDate, endDate)
      let filteredEvents = props.events.filter((evt)=>tempRange.contains(moment(evt.timeStamp.startDateObj)))
-     sendEmail( 'recipient', 'Infantino: My Data', JSON.stringify(filteredEvents.map(event =>({event})),null,'\t'), { cc: 'harms.schroeder@gmail.com;' }
-               ).then(() => { console.log('Your message was successfully sent!'); });
+     console.log("sending events")
+     let formattedEvents = JSON.stringify(filteredEvents.map(event =>({event})),null,'\t')
+     saveFile(formattedEvents,startDate.format('DD_MM_YY'),tempRange.end.format('DD_MM_YY')).then(() => { console.log('Your file was saved!');
+                                                                                                          alert('successfully saved file:Infantini_Export'+startDate.format('DD_MM_YY')+'-'+tempRange.end.format('DD_MM_YY')+' in your downloads folder')}).catch((err)=>{alert("error, please contact felix :)");
+                                                                                         console.log("file saving error:",err)});
+   //   sendEmail( 'recipient', 'Infantino: My Data', JSON.stringify(filteredEvents.map(event =>({event})),null,'\t'), { cc: 'harms.schroeder@gmail.com;' }
+   // ).then(() => { console.log('Your message was successfully sent!'); }).catch((err)=>{alert("error");
+   //                                                                                    console.log("mail error:",err)});
    }
  }
   return(

@@ -20,17 +20,23 @@ class HomeScreen extends Component {
     super(props)
   this.state={
     refresh:false,
-    times: [...times]
+    times: [...times],
+    now: moment().add(moment().utcOffset(),'m').minutes(0)
   }
 }
   componentDidMount(){
     this.props.onDayChange(moment())
+    this._unsubscribe = this.props.navigation.addListener(
+            'focus',
+            payload => {
+              this.props.onDayChange(moment());
+            })
   }
   componentDidUpdate(previousProps, previousState){
-    let index = moment().get('hour') >= 3 ? moment().get('hour')-3 : 0
+    let index = 23// moment().get('hour') >= 3 ? moment().get('hour')-3 : 0
     setTimeout(
-        () => { this.FlatList.scrollToIndex({animated: true, index: index})},
-        1000
+        () => { this.FlatList.scrollToEnd({animated: true})},
+        2000
       )
       if(this.props.events !== previousProps.events){
       this.refresh()}
@@ -42,22 +48,24 @@ class HomeScreen extends Component {
      times: [...prevState.times]
     }))
   }
-
+  componentWillUnmount(){
+    this._unsubscribe()
+  }
   //initialScrollIndex={moment().get('hour')-3}
   render(){
     return(
         <View style={styles.container} onLayout={()=>{this.refresh()}}>
         <Header backButton={false} title={"Home"} refresh={this.refresh}  onNavigate={this.props.navigation.navigate}/>
         <View style = {styles.elenaContainer}>
-          <Text style={styles.titleText}>{moment().format('ddd, Do MMMM')}</Text>
+          <Text style={styles.titleText}>The Last 24 hours</Text>
         </View>
         <View style = {styles.infoContainer}>
             <View style= {styles.infoScroller}>
               <View style= {styles.scrollview}>
               <FlatList style={{height:"100%", width:"100%"}}
               data={times}
-              renderItem={({item, index}) => <ListItem text={item} refresh={this.state.refresh} key={index} index={index} events={this.props.events} onPress={()=>{console.log(index)
-                                                                                                                          this.props.navigation.navigate('Logging',{index:index})}}/>}
+              renderItem={({item, index}) => <ListItem text={item} time={this.state.now.clone()} refresh={this.state.refresh} key={index} index={index} events={this.props.events} onPress={(moment)=>{console.log(moment)
+                                                                                                                          this.props.navigation.navigate('Logging',{index:moment})}}/>}
               keyExtractor={(item, index) => index.toString()}
               getItemLayout={(data, index) =>( {length: 80, offset: 80 * index, index: index}) }
               ref={(ref) => { this.FlatList = ref; }}

@@ -1,0 +1,33 @@
+Learn with Realm example,
+rewrite Infantini as bare React Native CLI project
+  identify crucial folder structure
+  identify reusable components
+  figure out easier way to work with date objects
+    can I define a base date and implement all timeline functions with "seconds since"?
+    example:
+      function isBetween(point, start, end){
+        let isAfterStart = start - point  < 0 ? false : true
+        let isBeforeEnd = point - end  < 0 ? false : true
+        return isAFterStart & isBeforeEnd
+      }
+  Then:
+    set up project
+    import jari icons
+    import Ionicons
+
+    create screens (Home, Logging, Data, Settings, Log In)
+    Make reusable components:
+      Button: should be responsive and use same colors,
+      Text: should scale with screen size and use nice font,
+
+
+    implement eventbox
+    implement timeline
+      draggable to move through hours?
+      scalable to show several hours?
+    create Realm Logic
+    implement Logging Modal (with timer?)
+    implement login
+    finish offline Logging with write to offline realm
+    sync with online db
+    implement homescreen overview

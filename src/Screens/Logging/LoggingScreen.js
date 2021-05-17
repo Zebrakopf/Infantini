@@ -60,9 +60,9 @@ class LoggingScreen extends Component {
     }
     if(this.props.route.params){
       let {index} = this.props.route.params
-      if(index || index === 0)
+      if(index)
       {
-        const date = moment().hour(index)//.add(moment().utcOffset(),"m")
+        const date = index//.add(moment().utcOffset(),"m")
         let prevHour = date.clone()
         let nextHour = date.clone()
         let nextDay = date.clone()
@@ -100,6 +100,11 @@ class LoggingScreen extends Component {
     }
   }
   componentDidMount(){
+    this._unsubscribe = this.props.navigation.addListener(
+            'focus',
+            payload => {
+              this.props.onDayChange(this.state.time.date);
+            })
     const date = moment()//.add(moment().utcOffset(),"m")
     let prevHour = date.clone()
     let nextHour = date.clone()
@@ -128,7 +133,9 @@ class LoggingScreen extends Component {
     })
 
   }
-
+  componentWillUnmount(){
+    this._unsubscribe()
+  }
 
   changeTime = (key, direction) =>{
     let date=null

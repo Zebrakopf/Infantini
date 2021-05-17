@@ -10,32 +10,32 @@ const N_CIRCLES_PER_ROW = 5
 
 const listItem = (props) => {
   const currentDate = moment()
-  const currentDateStart = moment({ year : currentDate.get('year') , month : currentDate.get('month'), day : currentDate.get('date'),
-                        hour :props.index, minute : 0, second :0, millisecond :0}).add(moment().utcOffset(),"m")
-  const currentDateEnd = currentDateStart.clone().add(1,'h')
-  const timeBoxesRaw = props.events.filter(evt => moment(evt.timeStamp.startDateObj).isBetween(currentDateStart, currentDateEnd) ||  moment(evt.timeStamp.endDateObj).isBetween(currentDateStart, currentDateEnd) || ( moment(evt.timeStamp.startDateObj).isBefore(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isAfter(currentDateEnd)) || ( moment(evt.timeStamp.startDateObj).isSame(currentDateStart) &&  moment(evt.timeStamp.endDateObj).isSame(currentDateEnd)))
 
-  const [checked, handleCheck] = useState(false)
-  const [missed, handleMissed] = useState(false)
+
+  const [myTimeStart,changemyTimeStart] = useState(props.time.clone().subtract(23 - props.index,'h'))
+  const [myTimeEnd,changemyTimeEnd] = useState(myTimeStart.clone().add(1,'h'))
   const [eventCircles, handleEventsCircles] = useState([])
+    const [firstRender, handleFirstRender] = useState(true)
+
+
+
 
   useEffect(()=>{
-    let checkedTemp = false
-    let missedTemp = false
     //console.log("rerender lstItem", props.index)
+    if(!firstRender){// timeBoxes are only evaluated on second render so that the list can build up quicklu once the app is loaded
+      const timeBoxesRaw = props.events.filter(evt => moment(evt.timeStamp.startDateObj).isBetween(myTimeStart, myTimeEnd) ||  moment(evt.timeStamp.endDateObj).isBetween(myTimeStart, myTimeEnd) || ( moment(evt.timeStamp.startDateObj).isBefore(myTimeStart) &&  moment(evt.timeStamp.endDateObj).isAfter(myTimeEnd)) || ( moment(evt.timeStamp.startDateObj).isSame(myTimeStart) &&  moment(evt.timeStamp.endDateObj).isSame(myTimeEnd)))
     if(timeBoxesRaw.length){
-      checkedTemp = true
-      handleEventsCircles(determineCircles())
-    }
-    else if(moment().hour() >= props.index){
 
-      handleMissed(true)
+      handleEventsCircles(determineCircles(timeBoxesRaw))
     }
+
     if(!timeBoxesRaw.length){
       handleEventsCircles([])
+    }}
+    else{
+      handleFirstRender(false)
     }
-    handleCheck(checkedTemp)
-  },[props.events])
+  },[props.events,firstRender])
 
   const determineCircle = (category) =>{
     switch(category){
@@ -59,21 +59,19 @@ const listItem = (props) => {
     }
     return null
   }
-  const determineCircles = (category) =>{
+  const determineCircles = (timeBoxesRaw) =>{
     let tempArray = []
     if (timeBoxesRaw.length){
       tempArray = timeBoxesRaw.map((evt)=>{return determineCircle(evt.category)})
     }
     return tempArray
   }
-
-
 //console.log('redirect to logging ' + currentDateStart.format("LLL") + ' end: '+ currentDateEnd.format("LT"), timeBoxesRaw)\
   return(
-  <TouchableOpacity style={styles.container}onPress={() => {props.onPress()}}>
+  <TouchableOpacity style={styles.container}onPress={() => {props.onPress(myTimeStart.clone().subtract(moment().utcOffset(),'m'))}}>
     <View style={styles.listItem}>
       <View style={styles.circle}>
-        {checked ? <Icon name={'ios-checkmark'} size={70} color={'black'}/> : (missed)? <Icon name={'ios-add'} size={70} color={'black'}/> : null}
+        {<Icon name={'ios-add'} size={70} color={'black'}/>}
       </View>
       <View style={styles.lineContainer}>
         <View style={styles.eventContainer}>
@@ -84,7 +82,7 @@ const listItem = (props) => {
           {eventCircles.map((evt,idx)=>{return(idx > N_CIRCLES_PER_ROW ? evt : null)})}
         </View>
       </View>
-      <Text style={styles.textTime}>{props.text}</Text>
+      <Text style={styles.textTime}>{ myTimeStart.clone().subtract(moment().utcOffset(),'m').format('HH:mm')} - {myTimeEnd.clone().subtract(moment().utcOffset(),'m').format("HH:mm")}</Text>
     </View>
     {props.index != 23 ? <View style={styles.verticalLine}/> : null}
   </TouchableOpacity>

@@ -9,13 +9,13 @@ const isToday = (evt,currentDateStart,currentDateEnd) => {return moment(evt.time
 
 const initialState = {
   allEvents: [],
-  todaysEvents:[]
+  todaysEvents:[]//now includes 3 days, current,before and after
 }
 
 
 export default  (state = initialState, action) => {
-    let currentDateStart = moment().hour(0).minute(0).add(moment().utcOffset(),"m")
-    let currentDateEnd = moment().hour(23).minute(59).add(moment().utcOffset(),"m")
+    let currentDateStart = moment().hour(0).minute(0).add(moment().utcOffset(),"m").subtract(1,'d')
+    let currentDateEnd = moment().hour(23).minute(59).add(moment().utcOffset(),"m").add(1,'d')
   switch (action.type){
     case ADD_EVENT:
       console.log('reducer start',currentDateStart,currentDateEnd)
@@ -70,8 +70,8 @@ export default  (state = initialState, action) => {
 
     }
     case PULL_CURRENT_EVENTS:
-      currentDateStart = action.day ? moment(action.day).clone().hour(0).minute(0).add(moment().utcOffset(),"m") : currentDateStart
-      currentDateEnd = action.day ? moment(action.day).clone().hour(23).minute(59).add(moment().utcOffset(),"m") : currentDateEnd
+      currentDateStart = action.day ? moment(action.day).clone().hour(0).minute(0).add(moment().utcOffset(),"m").subtract(1,'d') : currentDateStart
+      currentDateEnd = action.day ? moment(action.day).clone().hour(23).minute(59).add(moment().utcOffset(),"m").add(1,'d') : currentDateEnd
       console.log("inside pull current event",currentDateStart,currentDateEnd,moment(action.day).add(moment().utcOffset(),"m").date())
       let todaysEvents = state.allEvents.filter((evt)=>isToday(evt, currentDateStart, currentDateEnd))
       return{
